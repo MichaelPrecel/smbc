@@ -1,0 +1,232 @@
+/*
+==========================
+  Layout
+========================== */
+/*
+--------------------------
+  General
+-------------------------- */
+/*
+==========================
+  Images
+========================== */
+img {
+  border-style: none;
+  width: 100%;
+  height: auto;
+  display: block; // This seems to fix container divs extending beyond inner img
+}
+
+img[data-sizes="auto"] {
+  display: block;
+  width: 100%;
+}
+
+/* fade image in after load */
+.lazyload,
+.lazyloading {
+	opacity: 0;
+}
+.lazyloaded {
+	opacity: 1;
+	transition: opacity 300ms;
+}
+
+.img-cover {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+// Ratios
+.ratio-box {
+  display: block;
+  position: relative;
+  &:before {
+    display: block;
+    content: "";
+    width: 100%;
+  }
+  > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.ratio--3-2 {
+  &:before {
+    padding-top: (2 / 3) * 100%;
+  }
+}
+
+.ratio--2-1 {
+  &:before {
+    padding-top: (1 / 2) * 100%;
+  }
+}
+
+/*
+--------------------------
+  General modifiers
+-------------------------- */
+// Backgrounds
+.bg-blue {
+  background-color: var(--blue);
+}
+
+.bg-lightblue {
+  background-color: var(--lightblue);
+
+  .link-line {
+    border-top-color: white;
+    &:hover {
+      color: var(--blue);
+      border-top-color: var(--blue);
+    }
+
+    .link-arrow-right {
+      &:after {
+        background-image: url('../images/svg/arrow-right--blue.svg');
+      }
+    }
+  }
+}
+
+.bg-white {
+  background-color: white;
+
+  .link-line {
+    &:hover {
+      color: var(--lightblue);
+      border-top-color: var(--lightblue);
+    }
+  }
+
+  .link-arrow-right {
+    &:after {
+      background-image: url('../images/svg/arrow-right--lightblue.svg');
+    }
+  }
+}
+
+// Flex
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Padding 
+.inner-pad {
+  padding: var(--m);
+}
+
+.inner-pad--s {
+  padding: var(--s);
+}
+
+// Margins
+.margin-btm--s {
+  margin-bottom: var(--s);
+}
+.margin-btm--m {
+  margin-bottom: var(--m);
+}
+.margin-btm--l {
+  margin-bottom: var(--l);
+}
+.margin-btm--xl {
+  margin-bottom: var(--xl);
+}
+
+// Borders
+.border-top--blue {
+  border-top: 1px solid var(--blue);
+}
+
+/*
+--------------------------
+  Landing Row
+-------------------------- */
+.landing {
+  height: 100vh;
+  padding-top: var(--header);
+  display: flex;
+  flex-direction: column;
+}
+
+// Landing Intro
+.landing-intro {
+  display: flex;
+  flex-grow: 1;
+}
+
+.landing-intro__left {
+  padding: var(--m);
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.landing-intro__btm {
+  margin-top: var(--l);
+}
+
+.landing-intro__right {
+  width: calc( 100% / 3 );
+  background-color: var(--blue);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Landing Banner
+.landing-banner {
+  display: flex;
+}
+
+.landing-banner__left {
+  padding: var(--m);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 1;
+}
+
+.landing-banner__right {
+  width: calc( 100% / 3 );
+  padding: var(--m);
+}
+
+/*
+--------------------------
+  Row Right
+-------------------------- */
+.row-right {
+  display: flex;
+
+  .col-left {
+    width: calc( 100% / 3 );
+  }
+
+  .col-right {
+    flex: 1;
+  }
+}
+
+/*
+--------------------------
+  Row Full Bleed Image
+-------------------------- */
+.row-full-image {
+  width: 100%;
+}

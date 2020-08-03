@@ -1,0 +1,28 @@
+{
+  "name": "south-melbourne-business-community",
+  "version": "1.0.0",
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-autoprefixer": "*",
+    "grunt-contrib-concat": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-nodeunit": "*",
+    "grunt-contrib-sass": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-uglify-es": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-pixrem": "*",
+    "grunt-postcss": "*",
+    "grunt-svgstore": "*",
+    "postcss-object-fit-images": "*"
+  },
+  "dependencies": {
+    "@khanacademy/tota11y": "^0.2.0",
+    "autoprefixer": "*",
+    "pixrem": "*"
+  },
+  "browserslist": [
+    "defaults",
+    "last 2 versions"
+  ]
+}

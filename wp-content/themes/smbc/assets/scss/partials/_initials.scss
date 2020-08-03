@@ -1,0 +1,137 @@
+/*
+==========================
+  VARIABELS
+========================== */
+:root {
+  // Colours
+  --black:    #000;
+  --blue:    #1622DA;
+  --lightblue:  #1F95FF;
+
+  // Sizes
+  --xxxs:        0.25rem;
+  --xxs:         0.5rem;
+  --xs:          1rem;
+  --s:          2rem;
+  --m:          4rem;
+  --l:          6rem;
+  --xl:         8rem;
+  --xxl:        12rem;
+  --header:     10rem;
+
+  // Fonts
+  --sans: 'archivo', helvetica, helvetica neue, sans-serif;
+
+  // Transitions
+  --transition-general: 0.2s ease-out;
+}
+
+/*
+==========================
+  INITIALS
+========================== */
+/*
+--------------------------
+  Font installs
+-------------------------- */
+@font-face {
+  font-family: 'archivo';
+  src: url('../fonts/archivo-italic-webfont.woff2') format('woff2'),
+       url('../fonts/archivo-italic-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'archivo';
+  src: url('../fonts/archivo-regular-webfont.woff2') format('woff2'),
+       url('../fonts/archivo-regular-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'archivo';
+  src: url('../fonts/archivo-semibold-webfont.woff2') format('woff2'),
+       url('../fonts/archivo-semibold-webfont.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'archivo';
+  src: url('../fonts/archivo-semibolditalic-webfont.woff2') format('woff2'),
+       url('../fonts/archivo-semibolditalic-webfont.woff') format('woff');
+  font-weight: 600;
+  font-style: italic;
+}
+
+/*
+--------------------------
+  Kirby presets
+-------------------------- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-sizing: border-box;
+  list-style: none;
+  // overflow-y: auto;
+  // un-comment out following lines if we want it thinner!
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-overflow-scrolling: touch; /* momentum scrolling on mobiles */
+}
+
+article, aside, details, figcaption, figure,
+footer, header, main, menu, nav, section, summary {
+  /* Add correct display for IE 9- and some newer browsers */
+  display: block;
+}
+
+::-moz-selection {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+::selection {
+  background: var(--blue);
+  color: #ffffff;
+}
+
+// :focus:not(:focus-visible) {
+//   outline: none
+// }
+
+:focus {
+  outline-color: var(--highlight);
+}
+
+html {
+  background: #fff;
+  color: var(--blue);
+  font: normal 10px var(--sans);
+  // Set reasonable font size and line height depending on type in project
+  /* Always show the vertical scrollbar to prevent `jumps`
+     of page content after navigating from a very short page
+     that does not scroll to a long pager */
+  overflow-y: scroll;
+  /* Setting this to `default` prevents the cursors from
+     changing when hovering blocks of text or whitespace,
+     which is less distracting */
+  /* Neccessary for sticks footer. */
+  position: relative;
+  min-height: 100%;
+  /* Prevent adjustments of font size after orientation
+     changes in IE and iOS. */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  /* Highlight color for WebKit-bases touch devices. */
+  // -webkit-tap-highlight-color: transparent;
+  //         tap-highlight-color: transparent;
+  background-color: var(--cream);
+}
+
+body {
+  background-color: var(--blue);
+}

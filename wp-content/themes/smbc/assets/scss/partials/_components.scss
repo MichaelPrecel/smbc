@@ -1,0 +1,65 @@
+/*
+==========================
+  Header
+========================== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--m);
+  background-color: white;
+  border-bottom: 1px solid var(--blue);
+  z-index: 1000;
+}
+
+.nav-items {
+  display: flex;
+}
+
+.nav-item {
+  margin-left: var(--s);
+}
+
+/*
+==========================
+  Footer
+========================== */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: var(--s);
+
+  .grid-item {
+    grid-column: span 1;
+  }
+}
+
+.footer-base {
+  border-top: 1px solid white;
+  padding-top: var(--s);
+  padding-bottom: var(--s);
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer-top {
+  display: block;
+  background-color: inherit;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  &:after {
+    content: "";
+    background: url('../images/svg/totop-button.svg') center center no-repeat;
+    background-size: contain;
+    width: 1em;
+    height: 1em;
+    margin-left: var(--xxs);
+  }
+}
