@@ -41,7 +41,7 @@ h1 {
 
 .type-tiny {
   @extend .type;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   line-height: 1.25;
   // margin-bottom: calc( 1em * 1.25 );
 }
@@ -72,6 +72,10 @@ h1 {
 .text-block--border-top {
   padding-top: var(--s);
   border-top: 1px solid var(--blue);
+}
+
+.border--white {
+  border-color: white;
 }
 
 /*
@@ -121,6 +125,22 @@ a {
   
   &:hover {
     text-decoration: none;
+  }
+}
+
+// Link buttons
+.link-button {
+  border: 1px solid var(--blue);
+  display: inline-block;
+  padding: var(--xs) var(--m);
+  cursor: pointer;
+  transition: background-color var(--transition-general), color var(--transition-general);
+  // margin-top: var(--s);
+
+  &:hover {
+    text-decoration: none;
+    background-color: var(--blue);
+    color: white;
   }
 }
 
@@ -226,10 +246,13 @@ button {
   Markdown
 -------------------------- */
 .markdown {
-  p {
+  p, div {
+    margin-bottom: var(--s);
     a {
-      color: var(--highlight);
-      text-decoration: underline;
+      color: var(--lightblue);
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -240,24 +263,33 @@ button {
   em {
     font-style: italic;
   }
+
+  blockquote {
+    @extend .type-med;
+    padding-left: var(--m);
+    border-left: 2px solid var(--blue);
+    margin: var(--m) 0;
+  }
   
   ul {
-    margin: var(--m) 0;
+    margin: var(--s) 0;
     li {
       list-style: "–";
       margin-left: 1rem;
       list-style-position: outside;
       padding-left: 3rem;
+      margin-bottom: var(--xxs);
     }
   }
 
   ol {
-    margin: var(--m) 0;
+    margin: var(--s) 0;
     li {
       list-style: decimal;
       margin-left: 3rem;
       list-style-position: outside;
       padding-left: 1rem;
+      margin-bottom: var(--xxs);
 
       font-feature-settings: "tnum";
       font-variant-numeric: tabular-nums;

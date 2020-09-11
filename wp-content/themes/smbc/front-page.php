@@ -1,4 +1,4 @@
-<?php get_header(); ?>
+<?php get_header() ?>
 
   <main class="home" id="main">
     <!-- Landing Row -->
@@ -250,4 +250,4 @@
   
   </main>
 
-<?php get_footer(); ?>
+<?php get_footer() ?>

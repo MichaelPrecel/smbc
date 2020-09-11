@@ -1,15 +1,25 @@
 jQuery(document).ready(function(){
-  jQuery(".owl-carousel").owlCarousel({
-    loop: true,
-    nav: false,
-    margin: 0,
-    items: 1,
-    center: true
-  });
+  
+  /*
+  ==========================
+    Owl Carousel
+  ========================== */
+  carousels();
+  function carousels() {
+    jQuery(".owl-carousel").owlCarousel({
+      loop: true,
+      nav: false,
+      margin: 0,
+      items: 1,
+      center: true
+    });
+  }
 
-  // Accordions
+  /*
+  ==========================
+    Accordions
+  ========================== */
   accordions();
-
   function accordions() {
     // Open Accordion buttons
     jQuery('.acc-open, .acc-close').click(function(){
@@ -23,6 +33,27 @@ jQuery(document).ready(function(){
         panel.style.maxHeight = panel.scrollHeight + "px";
         outer.addClass('active');
       }
+    });
+  }
+
+  /*
+  ==========================
+    Header
+  ========================== */
+  jQuery('.login__open, .login__close').click(function(){
+    jQuery('body').toggleClass('login-active');
+  });
+
+  /*
+  ==========================
+    Members Directory
+  ========================== */
+  directory();
+  function directory() {
+    // Connection requests
+    jQuery('.connection-request-toggle').click(function(){
+      let box = jQuery(this).closest('.member').find('.connect-box');
+      box.toggleClass('active');
     });
   }
 });

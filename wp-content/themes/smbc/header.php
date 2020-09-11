@@ -37,13 +37,33 @@
 
   <header>
     <div class="logo-holder">
-      <?php get_template_part('includes/svg', 'logo-stacked') ?>
+      <a href="<?= get_home_url() ?>">
+        <?php get_template_part('includes/svg', 'logo-stacked') ?>
+      </a>
     </div>
     <ul class="nav-items type-small">
-      <li class="nav-item"><a href="#">About</a></li>
-      <li class="nav-item"><a href="#">Events</a></li>
+      <li class="nav-item"><a href="<?php echo get_permalink( get_page_by_title('about') ) ?>">About</a></li>
+      <li class="nav-item"><a href="<?php echo get_permalink( get_page_by_title('Events') ) ?>">Events</a></li>
       <li class="nav-item"><a href="#">News</a></li>
-      <li class="nav-item"><a href="#">Login</a></li>
       <li class="nav-item"><a href="#">Join</a></li>
+      <li class="nav-item"><button class="type-small login__open">Login</button></li>
     </ul>
   </header>
+
+  <aside class="login-outer bg-lightblue inner-pad">
+    <div class="login__header">
+      <button class="type-tiny type-white login__close">Close</button>
+    </div>
+    <div class="login__body">
+      <p class="type-small type-white margin-btm--m">Sign in to our members directory to connect with other business members, access your profile and view community offers.</p>
+
+      <form action="" class="login__form">
+        <input type="email" name="email" placeholder="Email Address"></input>
+        <input type="email" name="text" placeholder="Password"></input>
+        <input type="submit" value="Login">
+      </form>
+    </div>
+    <div class="login__footer text-block--border-top border--white">
+      <p class="type-tiny type-white">Having trouble logging in? Get in contact with us at <a href="mailto:contacts@smbc.com.au">contacts@smbc.com.au</a></p>
+    </div>
+  </aside>

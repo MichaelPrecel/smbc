@@ -75,87 +75,88 @@ Template Name: About
   <!-- Membership Levels -->
   <section class="membership bg-white">
     <h1 class="inner-pad type-large">Membership Levels</h1>
+    
     <div class="memberships-grid">
 
-        <div class="membership__header inner-pad">
-          <h1 class="type-med type-strong">Participant</h1>
-        </div>
-        <div class="membership__header inner-pad">
-          <h1 class="type-med type-strong">Associate Membership</h1>
-        </div>
-        <div class="membership__header inner-pad">
-          <h1 class="type-med type-strong">Premium Membership</h1>
-        </div>
-        <div class="membership__header inner-pad">
-          <h1 class="type-med type-strong">Network Sponsorship</h1>
-        </div>
+      <div class="membership__header inner-pad">
+        <h1 class="type-med type-strong">Participant</h1>
+      </div>
+      <div class="membership__header inner-pad">
+        <h1 class="type-med type-strong">Associate Membership</h1>
+      </div>
+      <div class="membership__header inner-pad">
+        <h1 class="type-med type-strong">Premium Membership</h1>
+      </div>
+      <div class="membership__header inner-pad">
+        <h1 class="type-med type-strong">Network Sponsorship</h1>
+      </div>
 
-        <div class="membership__body inner-pad">
-          <div class="markdown type-small margin-btm--m">
-            <p>Adipiscing iaculis magna tempus neque at volutpat augue facilisis eget. Turpis venenatis adipiscing facilisis massa porta. Dictum placerat fringilla vel lorem at suspendisse massa. Facilisis nibh suspendisse fringilla dolor et ut commodo posuere.</p>
-          </div>
+      <div class="membership__body inner-pad">
+        <div class="markdown type-small margin-btm--m">
+          <p>Adipiscing iaculis magna tempus neque at volutpat augue facilisis eget. Turpis venenatis adipiscing facilisis massa porta. Dictum placerat fringilla vel lorem at suspendisse massa. Facilisis nibh suspendisse fringilla dolor et ut commodo posuere.</p>
         </div>
-        <div class="membership__body inner-pad">
-          <div class="markdown type-small margin-btm--m">
-            <p>Adipiscing iaculis magna tempus neque at volutpat augue facilisis eget. Turpis venenatis adipiscing facilisis massa porta. Dictum placerat fringilla vel lorem at suspendisse massa. Facilisis nibh suspendisse fringilla dolor et ut commodo posuere.</p>
-          </div>
+      </div>
+      <div class="membership__body inner-pad">
+        <div class="markdown type-small margin-btm--m">
+          <p>Adipiscing iaculis magna tempus neque at volutpat augue facilisis eget. Turpis venenatis adipiscing facilisis massa porta. Dictum placerat fringilla vel lorem at suspendisse massa. Facilisis nibh suspendisse fringilla dolor et ut commodo posuere.</p>
         </div>
-        <div class="membership__body inner-pad">
-          <div class="markdown type-small margin-btm--m">
-            <p>Adipiscing iaculis magna tempus neque at volutpat augue facilisis eget. Turpis venenatis adipiscing facilisis massa porta. Dictum placerat fringilla vel lorem at suspendisse massa. Facilisis nibh suspendisse fringilla dolor et ut commodo posuere.</p>
-          </div>
+      </div>
+      <div class="membership__body inner-pad">
+        <div class="markdown type-small margin-btm--m">
+          <p>Adipiscing iaculis magna tempus neque at volutpat augue facilisis eget. Turpis venenatis adipiscing facilisis massa porta. Dictum placerat fringilla vel lorem at suspendisse massa. Facilisis nibh suspendisse fringilla dolor et ut commodo posuere.</p>
         </div>
-        <div class="membership__body inner-pad">
-          <div class="markdown type-small margin-btm--m">
-            <p>Adipiscing iaculis magna tempus neque at volutpat augue facilisis eget. Turpis venenatis adipiscing facilisis massa porta. Dictum placerat fringilla vel lorem at suspendisse massa. Facilisis nibh suspendisse fringilla dolor et ut commodo posuere.</p>
-          </div>
+      </div>
+      <div class="membership__body inner-pad">
+        <div class="markdown type-small margin-btm--m">
+          <p>Adipiscing iaculis magna tempus neque at volutpat augue facilisis eget. Turpis venenatis adipiscing facilisis massa porta. Dictum placerat fringilla vel lorem at suspendisse massa. Facilisis nibh suspendisse fringilla dolor et ut commodo posuere.</p>
         </div>
+      </div>
 
-        <div class="membership__features inner-pad">
-          <ul class="type-small">
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-          </ul>
-        </div>
-        <div class="membership__features inner-pad">
-          <ul class="type-small">
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-          </ul>
-        </div>
-        <div class="membership__features inner-pad">
-          <ul class="type-small">
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-          </ul>
-        </div>
-        <div class="membership__features inner-pad">
-          <ul class="type-small">
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-            <li>Attend sponsored events at no cost</li>
-          </ul>
-        </div>
+      <div class="membership__features inner-pad">
+        <ul class="type-small">
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+        </ul>
+      </div>
+      <div class="membership__features inner-pad">
+        <ul class="type-small">
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+        </ul>
+      </div>
+      <div class="membership__features inner-pad">
+        <ul class="type-small">
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+        </ul>
+      </div>
+      <div class="membership__features inner-pad">
+        <ul class="type-small">
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+          <li>Attend sponsored events at no cost</li>
+        </ul>
+      </div>
 
-        <div class="membership__footer inner-pad">
-          <p class="type-small"><strong>$450 p/a</strong></p>
-        </div>
-        <div class="membership__footer inner-pad">
-          <p class="type-small"><strong>$450 p/a</strong></p>
-        </div>
-        <div class="membership__footer inner-pad">
-          <p class="type-small"><strong>$450 p/a</strong></p>
-        </div>
-        <div class="membership__footer inner-pad">
-          <p class="type-small"><strong>$450 p/a</strong></p>
-        </div>
+      <div class="membership__footer inner-pad">
+        <p class="type-small"><strong>$450 p/a</strong></p>
+      </div>
+      <div class="membership__footer inner-pad">
+        <p class="type-small"><strong>$450 p/a</strong></p>
+      </div>
+      <div class="membership__footer inner-pad">
+        <p class="type-small"><strong>$450 p/a</strong></p>
+      </div>
+      <div class="membership__footer inner-pad">
+        <p class="type-small"><strong>$450 p/a</strong></p>
+      </div>
     </div>
   </section>
 

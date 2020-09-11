@@ -69,6 +69,12 @@ img[data-sizes="auto"] {
   }
 }
 
+.ratio--1-1 {
+  &:before {
+    padding-top: (1 / 1) * 100%;
+  }
+}
+
 /*
 --------------------------
   General modifiers
@@ -130,6 +136,12 @@ img[data-sizes="auto"] {
 }
 
 // Margins
+.margin-btm--xxs {
+  margin-bottom: var(--xxs);
+}
+.margin-btm--xs {
+  margin-bottom: var(--xs);
+}
 .margin-btm--s {
   margin-bottom: var(--s);
 }

@@ -104,7 +104,8 @@ footer, header, main, menu, nav, section, summary {
 // }
 
 :focus {
-  outline-color: var(--highlight);
+  // outline-color: var(--highlight);
+  outline: none;
 }
 
 html {
