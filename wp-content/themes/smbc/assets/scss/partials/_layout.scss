@@ -165,7 +165,7 @@ img[data-sizes="auto"] {
   Landing Row
 -------------------------- */
 .landing {
-  height: 100vh;
+  min-height: 100vh;
   padding-top: var(--header);
   display: flex;
   flex-direction: column;

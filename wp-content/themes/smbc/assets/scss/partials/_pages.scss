@@ -1,5 +1,13 @@
 /*
 ==========================
+  Default
+========================== */
+main {
+  background-color: white;
+}
+
+/*
+==========================
   Home
 ========================== */
 /*
@@ -535,4 +543,22 @@
     color: white;
     cursor: pointer;
   }
+}
+
+/*
+==========================
+  Directory: PM Pro Custom
+========================== */
+form {
+  &.pmpro_member_directory_search {
+    float: initial;
+    margin-bottom: var(--s);
+    clear: none;
+
+    input[type=submit] {
+      @extend .search-submit;
+      position: static;
+      text-indent: 0;
+    }
+  } 
 }

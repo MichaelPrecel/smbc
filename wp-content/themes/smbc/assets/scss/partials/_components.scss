@@ -124,9 +124,53 @@ main, header, footer {
   }
 }
 
-.login__form {
-  input {
+.login__footer {
+  margin-top: auto;
+}
+
+/*
+--------------------------
+  PM Pro customisations
+-------------------------- */
+/*
+--------------------------
+  PM Pro Login
+-------------------------- */
+.login-button {
+  border: 1px solid white;
+  @extend .type-small;
+  display: inline-block;
+  width: initial;
+  padding: var(--xs) var(--m);
+  margin-top: var(--s);
+  color: white;
+  cursor: pointer;
+  background-color: var(--lightblue);
+  transition: background-color var(--transition-general), color var(--transition-general);
+
+  &:hover {
+    background-color: white;
+    color: var(--blue);
+    text-decoration: none;
+  }
+}
+
+.pmpro_login_wrap {
+  > h2 {
+    display: none;
+  }
+}
+
+#loginform {
+  label {
+    font-weight: normal;
+    @extend .type-tiny;
+  }
+
+  // Inputs
+  input[type=text], input[type=password]{
     width: 100%;
+    max-width: 100%;
     border-bottom: 1px solid var(--blue);
     background-color: inherit;
     @extend .type-small;
@@ -140,21 +184,62 @@ main, header, footer {
   }
 
   input[type=submit] {
-    border: 1px solid white;
-    display: inline-block;
-    width: initial;
-    padding: var(--xs) var(--m);
-    margin-top: var(--m);
-    cursor: pointer;
-    transition: background-color var(--transition-general), color var(--transition-general);
+    @extend .login-button;
+  }
 
-    &:hover {
-      background-color: white;
-      color: var(--blue);
+  // Remember Me
+  .login-remember {
+    label {
+      display: flex;
+      width: 100%;
+      justify-items: flex-start;
+    }
+
+    #rememberme {
+      width: initial;
+      margin-right: var(--s);
     }
   }
 }
 
-.login__footer {
-  margin-top: auto;
+// Lost password
+.pmpro_actions_nav {
+  text-align: left;
+  @extend .type-tiny;
+  color: white;
+}
+
+/*
+--------------------------
+  PM Pro Log Out
+-------------------------- */
+.pmpro_logged_in_welcome_wrap {
+  h3 {
+    @extend .type-small;
+    @extend .type-white;
+    @extend .margin-btm--m;
+  }
+}
+
+.pmpro_member_log_out {
+  a {
+    @extend .login-button;
+  }
+}
+
+/*
+--------------------------
+  PM Pro Messages
+-------------------------- */
+.pmpro_message {
+  background-color: white;
+  border: none;
+  @extend .type-tiny;
+  margin: var(--s) 0;
+}
+
+.pmpro_success {
+  background-color: white;
+  border: none;
+  color: var(--lightblue);
 }

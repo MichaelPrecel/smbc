@@ -4,6 +4,7 @@
       <img src="<?= get_template_directory_uri() .'/assets/images/ph/ph-shoes.jpeg' ?>" alt="">
     </a>
   </div>
+  
   <div class="member__details">
     <h2 class="type-small type-strong"><a href="#">Nicholas Crema</a></h2>
     <p class="type-tiny type-lightblue type-italic">General Manager</p>
