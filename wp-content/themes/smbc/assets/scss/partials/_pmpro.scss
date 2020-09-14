@@ -1,0 +1,360 @@
+/*
+==========================
+  General
+========================== */
+.pmpro_btn, .pmpro_btn:link, .pmpro_content_message a, .pmpro_content_message a:link {
+  border-color: var(--lightblue);
+  background-color: white;
+  border: 1px solid var(--lightblue);
+  color: var(--lightblue);
+  font-weight: normal;
+  @extend .type-small;
+  transition: all 0.2s ease-in;
+  margin-top: var(--xs);
+  margin-right: var(--xs);
+
+  &:hover {
+    border-color: var(--blue);
+    background-color: blue;
+    color: white;
+  }
+}
+
+.pmpro_btn.pmpro_btn-cancel, .pmpro_btn.pmpro_btn-cancel:link, .pmpro_btn.pmpro_btn-cancel:hover, .entry-content a.pmpro_btn.pmpro_btn-cancel:hover {
+  border-color: var(--lightblue);
+  background-color: var(--lightblue);
+  border: 1px solid var(--lightblue);
+  color: white;
+  font-weight: normal;
+  @extend .type-small;
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--blue);
+    background-color: blue;
+    color: white;
+  }
+}
+
+/*
+==========================
+  Members Directory
+========================== */
+div.pmpro_member_directory div p {
+  margin: 0;
+}
+
+// Header
+.header {
+  margin-top: var(--header);
+  display: flex;
+  justify-content: space-between;
+}
+
+// Body
+// --------
+.body {
+  display: flex;
+}
+
+// Sidebar
+// --------
+.sidebar {
+  width: 30rem;
+  border-right: 1px solid var(--blue);
+}
+
+.search-input__outer {
+  display: flex;
+  margin-bottom: var(--s);
+
+  // &:after {
+  //   content: "";
+  //   // height: 100%;
+  //   width: 2rem;
+  //   border: 1px solid var(--blue);
+  //   background: url('../images/svg/icon-mag.svg') center center no-repeat;
+  //   background-size: contain;
+  // }
+}
+
+.search-input {
+  width: 100%;
+  @extend .type-tiny;
+  padding: var(--xs);
+  border: 1px solid var(--blue);
+  color: var(--lightblue);
+
+  background: url('../images/svg/icon-mag.svg') no-repeat center right;
+  background-position: calc(100% - 1rem) 50%;
+  background-size: 1em;
+
+  &::placeholder {
+    color: var(--blue);
+  }
+}
+
+.search-submit {
+  width: 100%;
+  background-color: var(--lightblue);
+  @extend .type-tiny;
+  color: white;
+  padding: var(--xs);
+  transition: background-color var(--transition-general);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--blue);
+  }
+}
+
+.sidebar__notices {
+  p {
+    @extend .text-block--border-top;
+    margin-bottom: var(--s);
+  }
+}
+
+// Main
+// --------
+.main {
+  flex: 1;
+}
+
+.stats {
+  display: flex;
+  border-bottom: 1px solid var(--blue);
+
+  > div {
+    flex: 1;
+    border-right: 1px solid var(--blue);
+    display: flex;
+    justify-content: center;
+  }
+
+  > a {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    &:hover {
+      text-decoration: none;
+      color: white;
+      background-color: var(--lightblue);
+    }
+  }
+}
+
+.sort-by-box {
+  display: flex;
+  align-items: center;
+
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url('../images/svg/dropdown.svg') no-repeat center right;
+    margin-left: var(--xxs);
+    color: var(--blue);
+  }
+}
+
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: var(--s);
+  grid-row-gap: var(--s);
+}
+
+// Member
+.member {
+  border: 1px solid var(--blue);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.member__picture-outer {
+  margin: var(--s);
+  margin-bottom: 0;
+}
+
+.member__picture {
+  border-radius: 50%;
+  border: 1px solid var(--blue);
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 20rem;
+}
+
+.member__details {
+  text-align: center;
+  margin: var(--s);
+
+  h3 {
+    @extend .type-small;
+  }
+
+  p {
+    @extend .type-tiny;
+  }
+}
+
+.member__btns {
+  margin: var(--s);
+  display:flex;
+  justify-content: center;
+}
+
+.member__btn {
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--blue);
+  margin: var(--xxs);
+  background: center center no-repeat;
+
+  &--www {
+    background-image: url('../images/svg/icon-www.svg');
+    background-size: 2rem;
+  }
+
+  &--li {
+    background-image: url('../images/svg/icon-li.svg');
+    background-size: 1.8rem;
+  }
+
+  &--mic {
+    background-image: url('../images/svg/icon-mic.svg');
+    background-size: 1.25rem;
+  }
+
+  &:hover {
+    background-color: var(--lightblue);
+  }
+}
+
+.member__footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: var(--xs);
+  border-top: 1px solid var(--blue);
+  transition: background-color var(--transition-general);
+  margin-top: auto;
+
+  &:hover {
+    background-color: var(--blue);
+  }
+}
+
+.connection-request {
+  text-align: center;
+}
+
+.connect-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: top 0.3s ease-in-out;
+  border-top: 1px solid var(--blue);
+
+  &.active {
+    top: -1px;
+  }
+}
+
+.connect-box__profile {
+  > div {
+    flex: 1;
+  }
+
+ .ratio-box {
+   border-radius: 50%;
+   border: 1px solid var(--blue);
+   overflow: hidden;
+ }
+}
+
+.connect-box__form {
+  input {
+    width: 100%;
+    @extend .type-tiny;
+    padding-bottom: var(--xxs);
+    margin-bottom: var(--xs);
+    border-bottom: 1px solid var(--blue);
+    color: var(--lightblue);
+    // text-align: center;
+  
+    &::placeholder {
+      color: var(--blue);
+      // text-align: center;
+    }
+  }
+
+  input[type=submit] {
+    background-color: var(--blue);
+    border: none;
+    padding: var(--xs);
+    color: white;
+    cursor: pointer;
+  }
+}
+
+/*
+==========================
+  Directory: PM Pro Custom
+========================== */
+form {
+  &.pmpro_member_directory_search {
+    float: initial;
+    margin-bottom: var(--s);
+    clear: none;
+
+    input[type=submit] {
+      @extend .search-submit;
+      position: static;
+      text-indent: 0;
+    }
+  } 
+}
+
+/*
+==========================
+  Account: PM Pro Custom
+========================== */
+#pmpro_account {
+  .pmpro_box {
+    border-color: var(--blue);
+
+    h3 {
+      @extend .type-med;
+      margin-bottom: var(--m);
+    }
+
+    p {
+      margin-bottom: var(--s);
+    }
+
+    // Tables
+    table {
+      text-align: left;
+      margin-top: var(--s);
+    }
+    th {
+      color: var(--lightblue);
+    }
+
+    .pmpro_actionlinks {
+      @extend .type-tiny;
+    }
+  }
+}
+

@@ -1,6 +1,12 @@
+<?php 
+  /* 
+  Template Name: Membership Default
+  */
+?>
+
 <?php get_header() ?>
   <main class="main-default">
-    <div class="landing">
+    <div class="landing membership-default">
       <section class="row-right">
         <div class="col-left bg-lightblue inner-pad">
           <h1 class="type-large type-white"><?= get_the_title() ?></h1>

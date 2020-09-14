@@ -225,6 +225,7 @@ img[data-sizes="auto"] {
 -------------------------- */
 .row-right {
   display: flex;
+  flex: 1;
 
   .col-left {
     width: calc( 100% / 3 );
