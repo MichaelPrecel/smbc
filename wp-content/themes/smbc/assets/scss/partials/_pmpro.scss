@@ -358,3 +358,30 @@ form {
   }
 }
 
+
+/*
+==========================
+  Members: Profiles
+========================== */
+.profile-co-block__outer {
+  button, a, input[type="submit"] {
+    border: 1px solid var(--blue);
+    background-color: white;
+    padding: var(--s);
+
+    &:hover {
+      background-color: var(--lightblue);
+    }
+  }
+
+  input[type="text"], input[type="textarea"] {
+    border-bottom: 1px solid var(--blue);
+    color: var(--lightblue);
+    padding: var(--xs) 0;
+
+    &::placeholder {
+      @extend .type-small;
+      color: var(--lightblue);
+    }
+  }
+}
