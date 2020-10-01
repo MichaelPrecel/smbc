@@ -91,6 +91,41 @@ Template Name: Events
           </div>
         </div>
       </div>
+
+      <div class="row-right border-top--blue">
+        <div class="col-left bg-blue">
+          <img class="img-cover" src="<?= get_template_directory_uri() .'/assets/images/ph/ph-shoes.jpeg' ?>" alt="">
+        </div>
+        <div class="col-right inner-pad bg-white">
+          <div class="col-right__inner text-block--max-width">
+            <div class="type-large margin-btm--l">
+              <h2>Properity requires ambition, commitment and training</h2>
+            </div>
+            <div class="type-med text-block--border-top">
+              <div class="markdown margin-btm--l">
+                <p>Viverra gravida et molestie maecenas bibendum consequat. Sagittis, laoreet sed gravida mattis ut eget dictum tellus. Ipsum.</p>
+              </div>
+  
+              <div class="event__details">
+                <div class="grid-item type-small border-top--blue">
+                  <h3 class="type-strong">Date</h3>
+                  <p class="type-lightblue">03 April 2020</p>
+                </div>
+                <div class="grid-item type-small border-top--blue">
+                  <h3 class="type-strong">Time</h3>
+                  <p class="type-lightblue">5:30pm</p>
+                </div>
+                <div class="grid-item type-small border-top--blue">
+                  <h3 class="type-strong">Venue</h3>
+                  <p class="type-lightblue">03 April 2020</p>
+                </div>
+              </div>
+  
+              <button class="type-small link-line link-arrow link-arrow--down acc-open">More details</button>
+            </div>
+          </div>
+        </div>
+      </div>
       
       <!-- Acc -->
       <div class="row-right event-panel">
@@ -124,11 +159,16 @@ Template Name: Events
                 <div class="type-small text-block--border-top text-block--max-width">
                   <h3 class="type-strong margin-btm--s">About the event</h3>
                   <div class="markdown">
-                    <p>At our Lakeside Stadium, we’re proudly launching the perfect arena to support leading businesses in the property, construction and finance game. Our events will attract and ignite conversations between ambitious minds and mentors. And, our community will support connecting our individual strengths to succeed together. Just as we see in sport.</p>
+                    <p>At our Lakeside Stadium, we’re proudly launching the perfect arena to support 
+                      leading businesses in the property, construction and finance game. Our events 
+                      will attract and ignite conversations between ambitious minds and mentors. 
+                      And, our community will support connecting our individual strengths to succeed 
+                      together. Just as we see in sport.</p>
                   </div>
                 </div>
 
-                <a class="type-small link-line link-arrow-right link-arrow-right--blue" href="">Book Now</a>
+                <a class="type-small link-line link-arrow-right link-arrow-right--blue" href="">
+                  Book Now</a>
               </div>
             </div>
           </div>

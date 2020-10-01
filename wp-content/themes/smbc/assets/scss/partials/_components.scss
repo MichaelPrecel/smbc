@@ -27,8 +27,115 @@ header {
 
 /*
 ==========================
+  Header Mobile
+========================== */
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--m);
+  background-color: white;
+  border-bottom: 1px solid var(--white);
+  z-index: 1000;
+}
+
+.hamburger {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--lightblue);
+  width: var(--header);
+  height: var(--header);
+  flex-direction: column;
+}
+
+.hamburger div {
+  background-color: var(--white);
+  width: 45%;
+  height: 1px;
+  margin: 8px;
+}
+
+.cross {
+  display: none;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--lightblue);
+  width: var(--header);
+  height: var(--header);
+  flex-direction: column;
+}
+
+.cross div {
+  position: absolute;
+  top: 25%;
+  left: 5%;
+  background-color: var(--white);
+  width: 50%;
+  height: 1px;
+  margin: 20px;
+}
+
+.rotateL {
+  transform-origin: center;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+.rotateR {
+  transform-origin: center;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+.mobile-nav-hover {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin-top: var(--header);
+
+  .nav-items {
+    display: flex;
+    flex-direction: column;
+    color: var(--white);
+    background-color: var(--blue);
+    height: 100vh;
+    overflow: hidden;
+    padding-top: 75px;
+  }
+}
+
+.nav-items {
+  display: flex;
+}
+
+.nav-item {
+  margin-left: var(--s);
+}
+
+/*
+==========================
   Footer
 ========================== */
+.top-r {
+  display: none;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: var(--s);
+}
+
 footer {
   border-top: 1px solid white;
 }
@@ -40,6 +147,7 @@ footer {
 
   .grid-item {
     grid-column: span 1;
+    position: relative;
   }
 }
 
@@ -60,7 +168,7 @@ footer {
 
   &:after {
     content: "";
-    background: url('../images/svg/totop-button.svg') center center no-repeat;
+    background: url("../images/svg/totop-button.svg") center center no-repeat;
     background-size: contain;
     width: 1em;
     height: 1em;
@@ -77,13 +185,18 @@ footer {
 }
 
 // Outer elements
-main, header, footer {
+main,
+header,
+footer {
   transition: transform 0.4s ease-in-out;
 }
 
 .login-active {
-  main, header, footer, .login-outer {
-    transform: translateX( calc( var(--login-width) * -1 ) );
+  main,
+  header,
+  footer,
+  .login-outer {
+    transform: translateX(calc(var(--login-width) * -1));
   }
 }
 
@@ -116,7 +229,7 @@ main, header, footer {
 
   &:after {
     content: "";
-    background: url('../images/svg/close.svg') center center no-repeat;
+    background: url("../images/svg/close.svg") center center no-repeat;
     background-size: contain;
     width: 1em;
     height: 1em;
@@ -146,7 +259,8 @@ main, header, footer {
   color: white;
   cursor: pointer;
   background-color: var(--lightblue);
-  transition: background-color var(--transition-general), color var(--transition-general);
+  transition: background-color var(--transition-general),
+    color var(--transition-general);
 
   &:hover {
     background-color: white;
@@ -168,7 +282,8 @@ main, header, footer {
   }
 
   // Inputs
-  input[type=text], input[type=password]{
+  input[type="text"],
+  input[type="password"] {
     width: 100%;
     max-width: 100%;
     border-bottom: 1px solid var(--blue);
@@ -179,11 +294,11 @@ main, header, footer {
     margin-bottom: var(--s);
 
     &::placeholder {
-      color: var(--blue)
+      color: var(--blue);
     }
   }
 
-  input[type=submit] {
+  input[type="submit"] {
     @extend .login-button;
   }
 
