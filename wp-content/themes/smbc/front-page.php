@@ -6,7 +6,9 @@
       <div class="landing-intro">
         <div class="landing-intro__left bg-white">
           <div class="landing-intro__top text-block--max-width">
-            <p class="type-med">Welcome to South Melbourne Business Community. We are the <strong>preeminent corporate network</strong> supporting leading businesses in the <em>property, construction and finance</em> game. Our events <strong>attract and ignite conversations</strong> between ambitious minds and industry mentors. As in sport, we work to connect our individual strengths in business, believing in <strong>greater prosperity</strong> when we unite together.</p>
+            <p class="type-med">Welcome to South Melbourne Business Community. We are the <strong>preeminent corporate network</strong> supporting leading businesses in the <em>property, 
+            construction and finance</em> game. Our events <strong>attract and ignite conversations</strong> between ambitious minds and industry mentors. 
+            As in sport, we work to connect our individual strengths in business, believing in <strong>greater prosperity</strong> when we unite together.</p>
           </div>
           <div class="landing-intro__btm text-block--max-width">
             <p class="type-med">Our grass is green and our door is always open, if you too, want <strong>better business</strong>.</p>
@@ -31,7 +33,7 @@
     <!-- Row Right -->
     <section class="row-right">
       <div class="col-left bg-blue inner-pad">
-        <h1 class="type-large type-white">Welcome to the South Melbourne Business Community</h1>
+        <h1 class="type-large type-white">Welcome<br class="line-br"> to the South<br class="line-br"> Melbourne<br class="line-br"> Business<br class="line-br"> Community</h1>
       </div>
       <div class="col-right bg-white inner-pad">
         <div class="col-right__inner text-block--max-width text-block--standard">

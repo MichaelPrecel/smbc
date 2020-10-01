@@ -29,15 +29,22 @@
 
     <div class="grid-item">
       <h1 class="type-tiny type-strong">Proud part of the</h1>
-      <p class="type-tiny margin-btm--s"><a href="https://www.smfc.com.au/">South Melbourne Football Club</a></p>
-      <p class="type-tiny"><a href="https://goo.gl/maps/ycXLNnenAtG3S8eK6" target="_blank">Lakeside Stadium<br>PO Box 1349<br>South Melbourne<br>Victoria, Australia 3205</a></p>
+      <p class="type-tiny margin-btm--s"><a href="https://www.smfc.com.au/">South Melbourne<br> Football Club</a></p>
+      <p class="type-tiny"><a href="https://goo.gl/maps/ycXLNnenAtG3S8eK6" target="_blank">
+      Lakeside Stadium<br>PO Box 1349<br>South Melbourne<br>Victoria, Australia 3205</a></p>
+
+      <a href="#main" class="top-r footer-top type-tiny type-white ">Top</a>
+
     </div>
 
   </div>  
 
   <div class="footer-base inner-pad">
-    <a href="#main" class="footer-top type-tiny type-white">Top</a>
-    <p class="type-tiny">© <?php echo date("Y") ?> South Melbourne Business Community. All rights reserved.</p>
+    <div class="top-non-r">
+    <a href="#main" class=" footer-top type-tiny type-white">Top</a>
+    </div>
+    <p class="type-tiny">© <?php echo date("Y") ?> South Melbourne Business Community. 
+    All rights reserved.</p>
   </div>
 </footer>
 

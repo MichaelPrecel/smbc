@@ -7,7 +7,7 @@
     "grunt-contrib-concat": "*",
     "grunt-contrib-jshint": "*",
     "grunt-contrib-nodeunit": "*",
-    "grunt-contrib-sass": "*",
+    "grunt-contrib-sass": "^2.0.0",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-uglify-es": "*",
     "grunt-contrib-watch": "*",

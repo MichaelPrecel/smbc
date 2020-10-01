@@ -61,4 +61,33 @@
     </ul>
   </header>
 
+<header class="mobile-nav">
+    <div class="logo-holder">
+      <a href="<?= get_home_url() ?>">
+        <?php get_template_part('includes/svg', 'logo-stacked') ?>
+      </a>
+    </div>
+
+       <div class="hamburger flex-center">
+         <div class="line1"></div>
+         <div class="line2"></div>
+         <div class="line3"></div>
+       </div>
+       <div class="cross flex-center">
+         <div class="rotateL"></div>
+         <div class="rotateR"></div>
+       </div>
+
+  <div class="mobile-container">
+   <div class="mobile-nav-hover">
+    <ul class="nav-items type-large inner-pad--s">
+      <li class="nav-item"><a href="<?php echo get_permalink( get_page_by_title('about') ) ?>">About</a></li>
+      <li class="nav-item"><a href="<?php echo get_permalink( get_page_by_title('Events') ) ?>">Events</a></li>
+      <li class="nav-item"><a href="#">News</a></li>
+      <li class="nav-item"><a href="#">Join</a></li>
+    </ul>
+   </div>
+  </div>
+</header>
+
   <?php get_template_part('includes/snippet', 'login') ?>
