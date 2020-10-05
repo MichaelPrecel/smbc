@@ -2,7 +2,7 @@
 ==========================
   Header
 ========================== */
-header {
+.fixed-header-desk {
   position: fixed;
   top: 0;
   left: 0;
@@ -42,6 +42,10 @@ header {
   background-color: white;
   border-bottom: 1px solid var(--white);
   z-index: 1000;
+
+  @include mobile {
+    padding: var(--s);
+  }
 }
 
 .hamburger {
@@ -197,6 +201,10 @@ footer {
   footer,
   .login-outer {
     transform: translateX(calc(var(--login-width) * -1));
+
+    @include mobile {
+      transform: translateX( -100% );
+    }
   }
 }
 
@@ -213,6 +221,10 @@ footer {
   flex-direction: column;
   justify-content: flex-start;
   transition: transform 0.4s ease-in-out;
+
+  @include mobile {
+    width: 100%;
+  }
 }
 
 .login__header {
@@ -220,7 +232,7 @@ footer {
   margin-bottom: var(--m);
 }
 
-.login__close {
+.login__close, .co__close, .sidebar__close {
   background-color: inherit;
   display: flex;
   align-items: center;
@@ -234,6 +246,13 @@ footer {
     width: 1em;
     height: 1em;
     margin-left: var(--xxs);
+  }
+}
+
+.sidebar__close {
+  &:after {
+    content: "";
+    background: url("../images/svg/close-blue.svg") center center no-repeat;
   }
 }
 
@@ -321,7 +340,12 @@ footer {
 .pmpro_actions_nav {
   text-align: left;
   @extend .type-tiny;
-  color: white;
+}
+
+.login__form {
+  .pmpro_actions_nav {
+    color: white;
+  }
 }
 
 /*
@@ -347,14 +371,26 @@ footer {
   PM Pro Messages
 -------------------------- */
 .pmpro_message {
-  background-color: white;
+  background-color: var(--lightblue);
   border: none;
   @extend .type-tiny;
   margin: var(--s) 0;
 }
 
 .pmpro_success {
-  background-color: white;
+  background-color: var(--lightblue);
   border: none;
-  color: var(--lightblue);
+  color: white;
+}
+
+.bg-lightblue {
+  .pmpro_message {
+    background-color: white;
+    color: var(--lightblue);
+  }
+  
+  .pmpro_success {
+    background-color: white;
+    color: var(--lightblue);
+  } 
 }

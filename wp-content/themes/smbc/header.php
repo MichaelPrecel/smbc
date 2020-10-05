@@ -25,31 +25,36 @@
   <!-- Favicon -->
 
   <!-- Load CSS w Query Selectors -->
-
   <?php wp_head() ?>
 
 </head>
 <body>
 
+  <?php $user = wp_get_current_user() ?>
+
   <noscript>
     <h1>We're sorry, this site works best with Javascript enabled, so please turn it on if you can.</h1>
   </noscript>
 
-  <header>
+  <header class="fixed-header-desk">
     <div class="logo-holder">
       <a href="<?= get_home_url() ?>">
         <?php get_template_part('includes/svg', 'logo-stacked') ?>
       </a>
     </div>
     <ul class="nav-items type-small">
-      <li class="nav-item"><a href="<?php echo get_permalink( get_page_by_title('about') ) ?>">About</a></li>
-      <li class="nav-item"><a href="<?php echo get_permalink( get_page_by_title('Events') ) ?>">Events</a></li>
-      <li class="nav-item"><a href="#">News</a></li>
-      <li class="nav-item"><a href="#">Join</a></li>
+      <li class="nav-item"><a href="<?= get_permalink( get_page_by_title('about') ) ?>">About</a></li>
+      <li class="nav-item"><a href="<?= get_permalink( get_page_by_title('Events') ) ?>">Events</a></li>
+      <li class="nav-item"><a href="<?= get_permalink( get_page_by_title('News') ) ?>">News</a></li>
+      <?php if ( $user->exists() ) : ?>
+        <li class="nav-item type-lightblue"><a href="<?= get_permalink( get_page_by_title('Directory') ) ?>">Directory</a></li>
+        <li class="nav-item type-lightblue"><a href="<?= get_permalink( get_page_by_title('Profile') ) ?>">Profile</a></li>
+      <?php else: ?>
+        <li class="nav-item type-lightblue"><a href="<?= get_permalink( get_page_by_title('Membership Checkout') ) ?>">Join</a></li>
+      <?php endif ?>
       <li class="nav-item">
-        <button class="type-small login__open">
+        <button class="type-small login__open type-lightblue">
           <?php 
-            $user = wp_get_current_user();
             if ( $user->exists() ) :
               echo 'Logout';
             else:
@@ -80,11 +85,27 @@
 
   <div class="mobile-container">
    <div class="mobile-nav-hover">
-    <ul class="nav-items type-large inner-pad--s">
-      <li class="nav-item"><a href="<?php echo get_permalink( get_page_by_title('about') ) ?>">About</a></li>
-      <li class="nav-item"><a href="<?php echo get_permalink( get_page_by_title('Events') ) ?>">Events</a></li>
-      <li class="nav-item"><a href="#">News</a></li>
-      <li class="nav-item"><a href="#">Join</a></li>
+    <ul class="nav-items type-med inner-pad--s">
+    <li class="nav-item"><a href="<?= get_permalink( get_page_by_title('about') ) ?>">About</a></li>
+      <li class="nav-item"><a href="<?= get_permalink( get_page_by_title('Events') ) ?>">Events</a></li>
+      <li class="nav-item"><a href="<?= get_permalink( get_page_by_title('News') ) ?>">News</a></li>
+      <?php if ( $user->exists() ) : ?>
+        <li class="nav-item type-lightblue"><a href="<?= get_permalink( get_page_by_title('Directory') ) ?>">Directory</a></li>
+        <li class="nav-item type-lightblue"><a href="<?= get_permalink( get_page_by_title('Profile') ) ?>">Profile</a></li>
+      <?php else: ?>
+        <li class="nav-item type-lightblue"><a href="<?= get_permalink( get_page_by_title('Membership Checkout') ) ?>">Join</a></li>
+      <?php endif ?>
+      <li class="nav-item">
+        <button class="type-med login__open type-lightblue">
+          <?php 
+            if ( $user->exists() ) :
+              echo 'Logout';
+            else:
+              echo 'Login';
+            endif;
+          ?>
+        </button>
+      </li>
     </ul>
    </div>
   </div>

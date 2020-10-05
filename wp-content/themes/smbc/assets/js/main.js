@@ -12,6 +12,16 @@ jQuery(document).ready(function () {
       items: 1,
       center: true,
     });
+
+    jQuery(".owl-testimonials").owlCarousel({
+      loop: true,
+      nav: false,
+      dots: false,
+      margin: 0,
+      items: 1,
+      center: true,
+      autoplay: true
+    });
   }
 
   /*
@@ -22,7 +32,7 @@ jQuery(document).ready(function () {
   function accordions() {
     // Open Accordion buttons
     jQuery(".acc-open, .acc-close").click(function () {
-      let outer = jQuery(this).closest(".event-outer");
+      let outer = jQuery(this).closest(".event-block");
       let panel = outer.find(".event-panel").get(0);
 
       if (panel.style.maxHeight) {
@@ -68,6 +78,16 @@ jQuery(document).ready(function () {
     jQuery(".connection-request-toggle").click(function () {
       let box = jQuery(this).closest(".member").find(".connect-box");
       box.toggleClass("active");
+    });
+
+    // Toggle Community Offers
+    jQuery('.community-offer__open').click(function(){
+      jQuery('.community-outer').toggleClass('active');
+    });
+
+    // Toggle Search Sidebar
+    jQuery('.sidebar__open, .sidebar__close').click(function(){
+      jQuery('.sidebar').toggleClass('active');
     });
   }
 });

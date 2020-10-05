@@ -8,72 +8,103 @@ Template Name: About
 
 <main class="about" id="main">
   <!-- Landing Row -->
-  <section class="landing">
+  <section class="landing border-btm--blue">
     <div class="landing-intro">
       <div class="landing-intro__left bg-white">
-        <div class="landing-intro__top text-block--max-width">
-          <p class="type-med">At our <strong>Lakeside Stadium</strong>, we provide the perfect arena to connect <strong>ambitious individuals</strong> and <em>support leading businesses</em> in the <strong>property, construction and finance</strong> game.</p>
+        <div class="landing-intro__top text-block--max-width type-med">
+          <?= the_field('landing_header') ?>
         </div>
-        <div class="landing-intro__btm text-block--max-width">
-          <p class="type-med">The <strong>success</strong> of our future stems from the quality of our people and our <strong>combined strengths</strong>.</p>
+        <div class="landing-intro__btm text-block--max-width type-med">
+          <?= the_field('landing_intro') ?>
         </div>
       </div>
 
       <div class="landing-intro__right">
-        <img src="<?= get_template_directory_uri() .'/assets/images/ph/ph-shoes.jpeg' ?>" alt="">
+        <?php 
+          $image = get_field('landing_image');
+          if ( $image ) {
+            echo wp_get_attachment_image( $image , 'full' );
+          }
+        ?>
       </div>
     </div>
 
-    <div class="landing-banner">
-      <div class="landing-banner__left bg-lightblue">
-        <p class="type-white type-small">As a member of our community, we'll connect you with the right people.</p>
+    <?php if ( !(wp_get_current_user()->exists()) ) : ?>
+      <div class="landing-banner">
+        <div class="landing-banner__left bg-lightblue">
+          <p class="type-white type-small">As a member of our community, we'll connect you with the right people.</p>
+        </div>
+        <div class="landing-banner__right bg-blue flex-center">
+          <p class="type-white type-small"><a class="link-arrow-right link-arrow-right--white" href="<?= get_permalink( get_page_by_title('about') ) ?>#membership">Become a member now</a></p>
+        </div>
       </div>
-      <div class="landing-banner__right bg-blue flex-center">
-        <p class="type-white type-small"><a class="link-arrow-right link-arrow-right--white" href="#">Become a member now</a></p>
-      </div>
-    </div>
+    <?php endif ?>
   </section>
 
   <!-- Row Right -->
   <section class="row-right">
     <div class="col-left bg-blue inner-pad">
-      <h1 class="type-large type-white">We’re a community passionate about forging a <strong>common goal</strong> of prosperity. </h1>
+      <div class="type-large type-white">
+        <?= get_field('about_header') ?>
+      </div>
     </div>
     <div class="col-right bg-white inner-pad">
       <div class="col-right__inner text-block--max-width text-block--standard">
         <div class="type-med margin-btm--l">
-          <p>Local in loyalty yet global in our <strong>network reach</strong>, we’re a union of elite skills. Our <em>south-side business community</em> has been established off the back of our success as a football club. Our goal is to <strong>formerly connect quality people</strong> and the commonalities we share. </p>
+          <?= the_field('about_intro') ?>
         </div>
         <div class="type-small text-block--border-top">
-          <p>As in sport, we believe the foundation to business prosperity is <strong>uniting talent and like-minded ambition</strong>. Strength in numbers; strength in the right connections.</p>
-          <p>So, we encourage you to <strong>join our community</strong> to start connecting with the right people to achieve better business outcomes. As a member, we warmly invite you to our annual events, you’ll gain access to our community portal, where you can create your own profile, as well as make requests to be introduced to those you’d like to meet.</p>
-          <p>Together, we can <strong>support one another</strong> to prosper even further.</p>
+          <?= the_field('about_text') ?>
         </div>
       </div>
     </div>
   </section>
 
   <div class="row-full-image ratio-box ratio--2-1">
-    <img class="img-cover" src="<?= get_template_directory_uri() .'/assets/images/ph/ph-shoes.jpeg' ?>" alt="">
+    <?php 
+      $image = get_field('about_banner');
+      if ( $image ) {
+        echo wp_get_attachment_image( $image , 'full', '', array("class" => "img-cover") );
+      }
+    ?>
   </div>
 
   <!-- Testimonials -->
   <section class="testimonials">
-    <div class="owl-carousel">
-      <div class="testimonial">
-        <div class="testimonial__left bg-lightblue type-white inner-pad">
-          <blockquote class="type-med margin-btm--l text-block--max-width">“<strong>South Melbourne Business Community</strong> was an invaluable part our <em>growth journey</em>. I instantly became part of a team that looked for every opportunity to <strong>hoist us up</strong> and get us involved. I couldn’t recommend it enough.”</blockquote>
-          <p class="type-small">Jane Lemon<br><a href="#">Local Builder Co</a></p>
+    <div class="owl-carousel owl-testimonials">
+      <?php 
+        $rows = get_field('testimonials'); 
+        if ( $rows ) :
+      ?>
+      <?php foreach ( $rows as $row ) : ?>
+        <div class="testimonial">
+          <div class="testimonial__left bg-lightblue type-white inner-pad">
+            <div class="type-med margin-btm--l text-block--max-width">
+              <?= $row['quote'] ?>
+            </div>
+            <p class="type-small"><?= $row['name'] ?></p>
+          </div>
+          <div class="testimonial__right">
+            <?php 
+            $image = $row['image'];
+              if ( $image ) {
+                echo wp_get_attachment_image( $image, 'full', '', array("class" => "img-cover") );
+              }
+            ?>
+          </div>
         </div>
-        <div class="testimonial__right">
-          <img class="img-cover" src="<?= get_template_directory_uri() .'/assets/images/ph/ph-shoes.jpeg' ?>" alt="">
-        </div>
-      </div>
+      <?php endforeach; endif ?>
     </div>
   </section>
 
   <!-- Membership Levels -->
-  <section class="membership bg-white">
+  <section class="about-memberships-outer type-small" id="membership">
+    <h1 class="inner-pad type-large">Membership Levels</h1>
+    <?php if ( have_posts() ): while( have_posts() ): the_post(); ?>
+      <?php the_content(); ?>
+    <?php endwhile; else: endif; ?>
+  </section>
+  <!-- <section class="membership bg-white" id="membership">
     <h1 class="inner-pad type-large">Membership Levels</h1>
     
     <div class="memberships-grid">
@@ -158,16 +189,18 @@ Template Name: About
         <p class="type-small"><strong>$450 p/a</strong></p>
       </div>
     </div>
-  </section>
+  </section> -->
 
-  <div class="landing-banner border-top--blue">
-    <div class="landing-banner__left bg-white">
-      <p class="type-small">To discuss membership, get in contact with us at contacts@smbc.com.au</p>
+  <?php if ( !(wp_get_current_user()->exists()) ) : ?>
+    <div class="landing-banner border-top--blue">
+      <div class="landing-banner__left bg-white">
+        <p class="type-small">To discuss membership, get in contact with us at <a href="mailto:contacts@smbc.com.au">contacts@smbc.com.au</a></p>
+      </div>
+      <div class="landing-banner__right bg-lightblue flex-center">
+        <p class="type-white type-small"><a class="link-arrow-right link-arrow-right--white" href="<?= get_permalink( get_page_by_title('Membership Checkout') ) ?>">Sign up now</a></p>
+      </div>
     </div>
-    <div class="landing-banner__right bg-lightblue flex-center">
-      <p class="type-white type-small"><a class="link-arrow-right link-arrow-right--white" href="#">Sign up now</a></p>
-    </div>
-  </div>
+  <?php endif ?>
 </main>
 
 <?php get_footer(); ?>

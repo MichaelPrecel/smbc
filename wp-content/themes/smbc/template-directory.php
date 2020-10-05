@@ -9,7 +9,7 @@ Template Name: Directory
 <main class="directory" id="main">
   <section class="header bg-blue inner-pad">
     <h1 class="type-large type-white">Members Directory</h1>
-    <div>
+    <div class="directory__ball">
       <img src="<?= get_template_directory_uri() .'/assets/images/svg/logo-ball--white.svg' ?>" alt="">
     </div>
   </section>  
