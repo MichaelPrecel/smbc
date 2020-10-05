@@ -41,7 +41,7 @@ h1 {
 
 .type-tiny {
   @extend .type;
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   line-height: 1.25;
   // margin-bottom: calc( 1em * 1.25 );
 }
@@ -56,7 +56,8 @@ h1 {
 
 .text-block--standard {
   p {
-    margin-bottom: calc(1em * 1.27);
+    // margin-bottom: calc(1em * 1.27);
+    margin-bottom: var(--s);
     // &:first-of-type {
     //   @extend .type-med;
     //   margin-bottom: var(--l);
@@ -276,6 +277,7 @@ button {
     padding-left: var(--m);
     border-left: 2px solid var(--blue);
     margin: var(--m) 0;
+    color: var(--lightblue);
   }
 
   ul {
@@ -306,6 +308,22 @@ button {
         font-variant-numeric: proportional-nums;
       }
     }
+  }
+}
+
+.article__body.markdown {
+  h1,h2,h3 {
+    margin-bottom: var(--s);
+  }
+
+  h1 {
+    @extend .type-large;
+  }
+  h2 {
+    @extend .type-med;
+  }
+  h3 {
+    color: var(--lightblue);
   }
 }
 

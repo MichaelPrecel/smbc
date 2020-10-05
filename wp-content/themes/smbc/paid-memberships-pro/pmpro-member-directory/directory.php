@@ -144,6 +144,9 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
   <!-- Start template -->
   <section class="sidebar inner-pad">
       <div class="sidebar__intro margin-btm--s">
+        <div class="login__header">
+          <button class="type-tiny sidebar__close">Close</button>
+        </div>
         <h2 class="type-small type-strong margin-btm--s">Search & Connect</h2>
         <p class="type-tiny">Looking for someone you met at one of our events, or need to connect with a new partner? Find them using the search box below by searching by name, business or even title.</p>
       </div>
@@ -184,24 +187,29 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
       <div class="sidebar__summary text-block--border-top margin-btm--l">
         <h2 class="type-small type-strong margin-btm--s">Profile Summary</h2>
         <ul class="type-tiny margin-btm--s">
+          <?php
+            $cur_u_i = get_current_user_id(); 
+            $my_offers = dctit_list_offer($cur_u_i);
+          ?>
           <li>Membership Level:<br><span class="type-lightblue">Premium Member</span></li>
           <li>Connections Remaining: <span class="type-lightblue">3</span></li>
-          <li>Current Community Offers: <span class="type-lightblue">1</span></li>
+          <li>Current Community Offers: <span class="type-lightblue"><?= count( $my_offers ) ?></span></li>
         </ul>
-        <a class="link-button type-tiny" href="">Community Offers</a>
+        <a class="link-button type-tiny" href="<?= get_permalink( get_page_by_title('profile') ) ?>#ind-co">Community Offers</a>
       </div>
 
       <div class="sidebar__notices type-tiny">
         <p>Click <strong>‘Request to Connect’</strong> to have our <em>Business Releationships Manager</em> put you in touch with the SMBC member.</p>
-        <p>For enquiries or connections, please get in contact with <a href="mailto:contact@smbc.com.au">contacts@smbc.com.au</a></p>
+        <p>For enquiries or connections, please get in contact with <a href="mailto:admin@smbc.com.au">admin@smbc.com.au</a></p>
         <p>We are always looking to make your community even better, please send us feedback or feature requests using the button below.</p>
-        <a class="link-button margin-top--s" href="">Send Feedback</a>
+        <a class="link-button margin-top--s" href="mailto:admin@smbc.com.au">Send Feedback</a>
       </div>
     </section>
     
     <!-- Main section -->
-    <section class="main">
+    <section class="main main-directory">
       <div class="stats type-tiny">
+        <button class="type-tiny inner-pad--s sidebar__open"><span>Search & Summary</span></button>
         <div class="inner-pad--s">
           <h3 id="pmpro_member_directory_subheading">
             <?php if(!empty($s)) { ?>
@@ -221,7 +229,7 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
             <?php } ?>
           </h3>
         </div>
-        <div class="inner-pad--s ">
+        <!-- <div class="inner-pad--s ">
           <div class="sort-by-box">
             <h4 class="type-tiny type-strong">Sort By:</h4>
             <select class="matter--body margin-bottom--remove" name="products-sort" id="products-sort">
@@ -231,8 +239,8 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
               <option value="price-low">Registration (desc)</option>
             </select>
           </div>
-        </div>
-        <a class="inner-pad--s" href="#"><span class="link-arrow link-arrow-right--blue">See Community Offers</span></a>
+        </div> -->
+        <button class="type-tiny inner-pad--s community-offer__open" href="#"><span class="link-arrow link-arrow-right--blue">See Community Offers</span></button>
       </div>
 
       <div class="members inner-pad">
@@ -428,7 +436,9 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
                                     <?php echo make_clickable($auser->{$field[1]}); ?>
                                     <?php
                                   }
+                                  
                                   ?>
+                                  
                                 </p>
                                 <?php
                               }
@@ -447,15 +457,13 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
                         <div class="connect-box">
                           <div class="inner-pad--s">
                             <p class="type-small margin-btm--s">Request to connect</p>
-                            <div class="connect-box__profile">
-                              <p class="type-tiny type-strong"><a href="#">Nicholas Crema</a></p>
-                              <p class="type-tiny type-lightblue type-italic">General Manager</p>
-                              <p class="type-tiny type-lightblue margin-btm--s">Crema Construction</p>
-                            </div>
                             <div class="connect-box__form-outer">
                               <form class="connect-box__form" action="">
-                                <input type="text" placeholder="Reason for connection...">
-                                <input class="margin-btm--s" type="text" placeholder="Message for Nicholas...">
+                                <input type="hidden" name="post_type" value="directory">
+                                <input type="hidden" name="sender_id" value="<?php echo get_current_user_id(); ?>">
+                                <input type="hidden" name="recipient_id" value="<?php echo $auser->ID; ?>">
+                                <input type="text" placeholder="Reason for connection" required>
+                                <input class="margin-btm--s" type="text" placeholder="Message" required>
                                 <input type="submit" value="Send Request">
                               </form>
                             </div>
@@ -533,7 +541,538 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
 			<?php
 		}
 		?>
-	</div>
+  </div>
+
+  <script>
+    (function() {
+      jQuery('.connect-box__form').each(function(i, form) {
+        jQuery(form).on('submit', function(e) {
+          e.preventDefault();
+          let form = jQuery(e.currentTarget);
+          console.log(form)
+
+          var __messageFormData = {};
+
+          jQuery.each(form.serializeArray(), function(i, field) {
+            __messageFormData[field.name] = field.value;
+          });
+          console.log(__messageFormData);
+          ajaxLoading();
+          jQuery.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: myAjax.ajaxurl,
+            data: {
+              action: 'send_request',
+              ...__messageFormData
+            },
+            success: function(response) {
+              if (response.type === 'success') {
+                ajaxSuccess();
+                setTimeout(function() {
+                  console.log('succeed')
+                  location.reload();
+                }, 1000);
+              } else {
+                console.log('Request Not Succeed')
+              }
+            }
+          });
+        });
+      });
+    }());
+    // Loading animation when a request send
+    function ajaxLoading() {
+      var loadingOverlay = document.createElement('div');
+      loadingOverlay.setAttribute('class', 'loading-overlay');
+
+      let loadDiv = document.createElement('div');
+      loadDiv.setAttribute('class', 'spinner')
+
+      for (let i = 0; i < 8; i++) {
+        let spinElm = document.createElement('div')
+        loadDiv.append(spinElm);
+      }
+
+      jQuery(loadingOverlay).append(loadDiv);
+      jQuery('.body.bg-white').append(loadingOverlay);
+      jQuery('.loading-overlay').addClass('load');
+    }
+
+    // Success animation when a request succeed
+    function ajaxSuccess() {
+      jQuery('.spinner').remove();
+
+      let success = document.createElement('div');
+      success.setAttribute('class', 'success');
+
+      let inner = document.createElement('div');
+      inner.setAttribute('class', 'dct-icon dct-success animate');
+
+      let content_1 = document.createElement('span');
+      content_1.setAttribute('class', 'dct-line dct-tip animateSuccessTip');
+
+      let content_2 = document.createElement('span');
+      content_2.setAttribute('class', 'dct-line dct-long animateSuccessLong');
+
+      let content_3 = document.createElement('div');
+      content_3.setAttribute('class', 'dct-placeholder');
+
+      let content_4 = document.createElement('div');
+      content_4.setAttribute('class', 'dct-fix');
+
+      inner.append(content_1);
+      inner.append(content_2);
+      inner.append(content_3);
+      inner.append(content_4);
+      success.append(inner);
+
+      jQuery('.loading-overlay').append(success);
+
+      jQuery(".dct-success").addClass("hide");
+      setTimeout(function() {
+        jQuery(".dct-success").removeClass("hide");
+      }, 10);
+    }
+  </script>
+  <style>
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      background: #fff;
+      display: none;
+    }
+
+    .loading-overlay.load {
+      display: block;
+      animation: fade-in 1s cubic-bezier(0.5, 0, 0.5, 1);
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 80px;
+      height: 80px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -100%);
+    }
+
+    .spinner div {
+      animation: spine 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      transform-origin: 40px 40px;
+    }
+
+    .spinner div:after {
+      content: " ";
+      display: block;
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgb(31, 149, 255);
+      margin: -4px 0 0 -4px;
+    }
+
+    .spinner div:nth-child(1) {
+      animation-delay: -0.036s;
+    }
+
+    .spinner div:nth-child(1):after {
+      top: 63px;
+      left: 63px;
+    }
+
+    .spinner div:nth-child(2) {
+      animation-delay: -0.072s;
+    }
+
+    .spinner div:nth-child(2):after {
+      top: 68px;
+      left: 56px;
+    }
+
+    .spinner div:nth-child(3) {
+      animation-delay: -0.108s;
+    }
+
+    .spinner div:nth-child(3):after {
+      top: 71px;
+      left: 48px;
+    }
+
+    .spinner div:nth-child(4) {
+      animation-delay: -0.144s;
+    }
+
+    .spinner div:nth-child(4):after {
+      top: 72px;
+      left: 40px;
+    }
+
+    .spinner div:nth-child(5) {
+      animation-delay: -0.18s;
+    }
+
+    .spinner div:nth-child(5):after {
+      top: 71px;
+      left: 32px;
+    }
+
+    .spinner div:nth-child(6) {
+      animation-delay: -0.216s;
+    }
+
+    .spinner div:nth-child(6):after {
+      top: 68px;
+      left: 24px;
+    }
+
+    .spinner div:nth-child(7) {
+      animation-delay: -0.252s;
+    }
+
+    .spinner div:nth-child(7):after {
+      top: 63px;
+      left: 17px;
+    }
+
+    .spinner div:nth-child(8) {
+      animation-delay: -0.288s;
+    }
+
+    .spinner div:nth-child(8):after {
+      top: 56px;
+      left: 12px;
+    }
+
+    @keyframes spine {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .success {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -100%);
+    }
+
+    .hide {
+      display: none;
+    }
+
+    .dct-icon {
+      width: 80px;
+      height: 80px;
+      border: 4px solid gray;
+      -webkit-border-radius: 40px;
+      border-radius: 40px;
+      border-radius: 50%;
+      margin: 20px auto;
+      padding: 0;
+      position: relative;
+      box-sizing: content-box;
+    }
+
+    .dct-icon.dct-success {
+      border-color: rgb(31, 149, 255);
+    }
+
+    .dct-icon.dct-success::before,
+    .dct-icon.dct-success::after {
+      content: '';
+      -webkit-border-radius: 40px;
+      border-radius: 40px;
+      border-radius: 50%;
+      position: absolute;
+      width: 60px;
+      height: 120px;
+      background: white;
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+
+    .dct-icon.dct-success::before {
+      -webkit-border-radius: 120px 0 0 120px;
+      border-radius: 120px 0 0 120px;
+      top: -7px;
+      left: -33px;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      -webkit-transform-origin: 60px 60px;
+      transform-origin: 60px 60px;
+    }
+
+    .dct-icon.dct-success::after {
+      -webkit-border-radius: 0 120px 120px 0;
+      border-radius: 0 120px 120px 0;
+      top: -11px;
+      left: 30px;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      -webkit-transform-origin: 0px 60px;
+      transform-origin: 0px 60px;
+    }
+
+    .dct-icon.sa-success .dct-placeholder {
+      width: 80px;
+      height: 80px;
+      border: 4px solid rgba(76, 175, 80, .5);
+      -webkit-border-radius: 40px;
+      border-radius: 40px;
+      border-radius: 50%;
+      box-sizing: content-box;
+      position: absolute;
+      left: -4px;
+      top: -4px;
+      z-index: 2;
+    }
+
+    .dct-icon.dct-success .dct-fix {
+      width: 5px;
+      height: 90px;
+      background-color: white;
+      position: absolute;
+      left: 28px;
+      top: 8px;
+      z-index: 1;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+    }
+
+    .dct-icon.dct-success.animate::after {
+      -webkit-animation: rotatePlaceholder 4.25s ease-in;
+      animation: rotatePlaceholder 4.25s ease-in;
+    }
+
+    .dct-icon.dct-success {
+      border-color: transparent\9;
+    }
+
+    .dct-icon.dct-success .dct-line.dct-tip {
+      -ms-transform: rotate(45deg) \9;
+    }
+
+    .dct-icon.dct-success .dct-line.dct-long {
+      -ms-transform: rotate(-45deg) \9;
+    }
+
+    .animateSuccessTip {
+      -webkit-animation: animateSuccessTip 0.75s;
+      animation: animateSuccessTip 0.75s;
+    }
+
+    .animateSuccessLong {
+      -webkit-animation: animateSuccessLong 0.75s;
+      animation: animateSuccessLong 0.75s;
+    }
+
+    @-webkit-keyframes animateSuccessLong {
+      0% {
+        width: 0;
+        right: 46px;
+        top: 54px;
+      }
+
+      65% {
+        width: 0;
+        right: 46px;
+        top: 54px;
+      }
+
+      84% {
+        width: 55px;
+        right: 0px;
+        top: 35px;
+      }
+
+      100% {
+        width: 47px;
+        right: 8px;
+        top: 38px;
+      }
+    }
+
+    @-webkit-keyframes animateSuccessTip {
+      0% {
+        width: 0;
+        left: 1px;
+        top: 19px;
+      }
+
+      54% {
+        width: 0;
+        left: 1px;
+        top: 19px;
+      }
+
+      70% {
+        width: 50px;
+        left: -8px;
+        top: 37px;
+      }
+
+      84% {
+        width: 17px;
+        left: 21px;
+        top: 48px;
+      }
+
+      100% {
+        width: 25px;
+        left: 14px;
+        top: 45px;
+      }
+    }
+
+    @keyframes animateSuccessTip {
+      0% {
+        width: 0;
+        left: 1px;
+        top: 19px;
+      }
+
+      54% {
+        width: 0;
+        left: 1px;
+        top: 19px;
+      }
+
+      70% {
+        width: 50px;
+        left: -8px;
+        top: 37px;
+      }
+
+      84% {
+        width: 17px;
+        left: 21px;
+        top: 48px;
+      }
+
+      100% {
+        width: 25px;
+        left: 14px;
+        top: 45px;
+      }
+    }
+
+    @keyframes animateSuccessLong {
+      0% {
+        width: 0;
+        right: 46px;
+        top: 54px;
+      }
+
+      65% {
+        width: 0;
+        right: 46px;
+        top: 54px;
+      }
+
+      84% {
+        width: 55px;
+        right: 0px;
+        top: 35px;
+      }
+
+      100% {
+        width: 47px;
+        right: 8px;
+        top: 38px;
+      }
+    }
+
+    .dct-icon.dct-success .dct-line {
+      height: 5px;
+      background-color: rgb(31, 149, 255);
+      display: block;
+      border-radius: 2px;
+      position: absolute;
+      z-index: 2;
+    }
+
+    .dct-icon.dct-success .dct-line.dct-tip {
+      width: 25px;
+      left: 14px;
+      top: 46px;
+      -webkit-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+
+    .dct-icon.dct-success .dct-line.dct-long {
+      width: 47px;
+      right: 8px;
+      top: 38px;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+    }
+
+    @-webkit-keyframes rotatePlaceholder {
+      0% {
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+      }
+
+      5% {
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+      }
+
+      12% {
+        transform: rotate(-405deg);
+        -webkit-transform: rotate(-405deg);
+      }
+
+      100% {
+        transform: rotate(-405deg);
+        -webkit-transform: rotate(-405deg);
+      }
+    }
+
+    @keyframes rotatePlaceholder {
+      0% {
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+      }
+
+      5% {
+        transform: rotate(-45deg);
+        -webkit-transform: rotate(-45deg);
+      }
+
+      12% {
+        transform: rotate(-405deg);
+        -webkit-transform: rotate(-405deg);
+      }
+
+      100% {
+        transform: rotate(-405deg);
+        -webkit-transform: rotate(-405deg);
+      }
+    }
+  </style>
 	<?php
 	?>
 	<?php

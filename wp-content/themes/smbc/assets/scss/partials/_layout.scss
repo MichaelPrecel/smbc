@@ -129,6 +129,10 @@ img[data-sizes="auto"] {
 // Padding
 .inner-pad {
   padding: var(--m);
+
+  @include mobile {
+    padding: var(--s);
+  }
 }
 
 .inner-pad--s {
@@ -158,6 +162,15 @@ img[data-sizes="auto"] {
 // Borders
 .border-top--blue {
   border-top: 1px solid var(--blue);
+}
+
+.border-top--white {
+  border-top: 1px solid var(--white);
+  padding-top: var(--s);
+}
+
+.border-btm--blue {
+  border-bottom: 1px solid var(--blue);
 }
 
 /*

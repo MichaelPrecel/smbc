@@ -42,6 +42,62 @@
 ========================== */
 div.pmpro_member_directory div p {
   margin: 0;
+
+  &.pmpro_member_directory_website, &.pmpro_member_directory_linkedin {
+    margin: var(--xs) var(--xxs);
+  }
+}
+
+.directory__body {
+  // Locked message
+  .pmpro_content_message {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: var(--m);
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    @extend .type-small;
+  }
+
+  @include mobile {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    .login__header {
+      display: none;
+
+      @include mobile {
+        display: block;
+      }
+    }
+
+    &.active {
+      transform: translateX(0);
+    }
+
+    @include mobile {
+      background: white;
+      max-width: 50rem;
+      z-index: 2000;
+      width: 100%;
+      transform: translateX(-100%);
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100%;
+      transition: transform 0.4s ease-out;
+      overflow: auto;
+
+      .text-block--border-top,
+      .sidebar__notices p {
+        padding-top: var(--s);
+        border-top: 1px solid var(--blue);
+      }
+    }
+  }
 }
 
 // Header
@@ -132,15 +188,31 @@ div.pmpro_member_directory div p {
     justify-content: center;
   }
 
-  > a {
+  button {
     flex: 1;
     display: flex;
     justify-content: center;
+    align-items: center;
     &:hover {
       text-decoration: none;
       color: white;
       background-color: var(--lightblue);
     }
+  }
+
+  .sidebar__open {
+    display: none;
+  
+    @include mobile {
+      display: flex;
+      width: 100%;
+      border-bottom: 1px solid var(--blue);
+      flex: initial;
+    }
+  }
+
+  @include mobile {
+    flex-wrap: wrap;
   }
 }
 
@@ -163,6 +235,18 @@ div.pmpro_member_directory div p {
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: var(--s);
   grid-row-gap: var(--s);
+
+  @include desktop {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mobile {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 // Member
@@ -233,6 +317,43 @@ div.pmpro_member_directory div p {
     background-color: var(--lightblue);
   }
 }
+
+.directory__body {
+  .pmpro_member_directory_position, .pmpro_member_directory_company, .pmpro_member_directory_website, .pmpro_member_directory_linkedin {
+    strong {display: none;}
+  }
+  
+  .pmpro_member_directory_position {
+    font-style: italic;
+  }
+  
+  .pmpro_member_directory_position, .pmpro_member_directory_company {
+    color: var(--lightblue);
+  }
+  
+  .pmpro_member_directory_website, .pmpro_member_directory_linkedin {
+    @extend .member__btn;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+  
+    a {
+      display: block;
+      text-indent: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+  
+  .pmpro_member_directory_website {
+    @extend .member__btn--www;
+  }
+  
+  .pmpro_member_directory_linkedin {
+    @extend .member__btn--li;
+  }
+}
+
 
 .member__footer {
   width: 100%;
@@ -308,6 +429,99 @@ div.pmpro_member_directory div p {
   }
 }
 
+.connect-box__form-outer {
+  margin-top: var(--s);
+}
+
+.directory__ball {
+  height: 6rem;
+
+  img {
+    max-height: 100%;
+  }
+}
+
+/*
+--------------------------
+  Community Offers Sidebar
+-------------------------- */
+.main-directory {
+  position: relative;
+}
+
+.community-outer {
+  position: fixed;
+  top: 0;
+  height: 100%;
+  width: var(--login-width);
+  z-index: 2000;
+  border-left: 1px solid var(--blue);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transition: transform 0.4s ease-in-out;
+  
+  right: 0;
+  transform: translateX(100%);
+  overflow: auto;
+
+  &.active {
+    transform: translateX(0);
+  }
+
+  .login__header {
+    position: sticky;
+    top: 0;
+  }
+}
+
+.co-block {
+  margin-top: var(--s);
+  margin-bottom: var(--l);
+  padding-top: var(--s);
+  border-top: 1px solid white;
+}
+
+.co__view {
+  padding: var(--xs) var(--s);
+  border: 1px solid white;
+  margin: var(--m) 0 ;
+  display: block;
+  text-align: center;
+
+  &:hover {
+    text-decoration: none;
+    background-color: var(--white);
+    color: var(--lightblue);
+  }
+}
+
+.co-block__offerer {
+  display: flex;
+  > div {
+    min-width: 30%;
+  }
+}
+
+.co-block__profile {
+  display: flex;
+  flex: 1;
+  margin-left: var(--s);
+}
+
+.co-block__pic {
+  border-radius: 50%;
+  overflow:hidden;
+  max-width: 6rem;
+  margin-right: var(--s);
+  border: 1px solid white;
+}
+
+.co-block__profile-text {
+  flex: 1;
+}
+
 /*
 ==========================
   Directory: PM Pro Custom
@@ -355,6 +569,10 @@ form {
     .pmpro_actionlinks {
       @extend .type-tiny;
     }
+
+    .pmpro_actionlinks {
+      margin-top: var(--xs);
+    }
   }
 }
 
@@ -363,14 +581,27 @@ form {
 ==========================
   Members: Profiles
 ========================== */
+.profile {
+  .membership-default {
+    min-height: initial;
+  
+    .row-right {
+      @include mobile {
+        flex-direction: column-reverse;
+      }
+    }
+  } 
+}
+
 .profile-co-block__outer {
   button, a, input[type="submit"] {
-    border: 1px solid var(--blue);
-    background-color: white;
-    padding: var(--s);
+    border: 1px solid white;
+    background-color: var(--lightblue);
+    padding: var(--xs) var(--s);
 
     &:hover {
-      background-color: var(--lightblue);
+      background-color: var(--white);
+      color: var(--lightblue);
     }
   }
 
@@ -383,5 +614,352 @@ form {
       @extend .type-small;
       color: var(--lightblue);
     }
+  }
+}
+
+.profile-co-block {
+  border-top: 1px solid white;
+  padding-top: var(--s);
+  margin-top: var(--m);
+  
+  button {
+    margin-right: var(--xs);
+  }
+}
+
+.profile__left-col {
+  border-right: 1px solid var(--blue);
+  padding: 0;
+}
+
+.profile__return {
+  display: block;
+  padding: var(--s);
+  border-bottom: 1px solid var(--blue);
+
+  &:hover, &:focus, &:active {
+    background-color: var(--lightblue);
+    color: white;
+  }  
+}
+
+.link--remove-hover {
+  &:hover, &:focus, &:active {
+    text-decoration: none;
+  }
+}
+
+.profile {
+  .profile__main {
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pmpro_member_directory_avatar {
+    position: absolute;
+    top: var(--xs);
+    left: var(--xs);
+    border-radius: 50%;
+    border: 1px solid white;
+    overflow: hidden;
+    width: 20rem;
+    height: 20rem;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+
+  #pmpro_actionlink-view-all-members {
+    display: none;
+  }
+
+  #pmpro_actionlink-profile {
+    @extend .link-button;
+  }
+
+  .pmpro_actions_nav {
+    margin-top: var(--m);
+  }
+}
+
+.profile__header {
+  background-color: var(--blue);
+  padding: var(--s);
+  padding-left: calc( var(--s) + 20rem );
+}
+
+.profile__main-inner {
+  // padding: var(--m);
+  padding-top: calc( var(--s) + 15rem );
+  border-right: 1px solid var(--blue);
+}
+
+.profile__text {
+  padding: var(--m);
+
+  @include mobile {
+    padding: var(--s);
+  }
+}
+
+.pmpro_member_profile {
+  padding-top: var(--s);
+
+  > p {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: var(--xxs);
+    word-break: break-all;
+
+    strong {
+      font-weight: normal;
+    }
+
+    > * {
+      // max-width: 40rem;
+      // width: 50%;
+      min-width: 30%;
+    }
+  }
+
+  .pmpro_member_directory_bio {
+    margin-top: var(--m);
+    padding-top: var(--s);
+    flex-direction: column;
+    margin-bottom: var(--m);
+  }
+}
+
+// Community Offers Individual
+.profile-co-block__inner {
+  padding: var(--m);
+
+  @include mobile {
+    padding: var(--s);
+  }
+}
+
+// Submit offer
+.co-ind-form {
+  display: flex;
+  flex-direction: column;
+
+  input[type=text], input[type=textarea] {
+    margin-top: var(--s);
+    background-color: var(--lightblue);
+    color: white;
+    @extend .type-tiny;
+    border-color: white;
+
+    &::placeholder {
+      color: white;
+      @extend .type-tiny;
+    }
+  }
+
+  input[type=submit] {
+    margin-top: var(--m);
+    display: inline-block;
+    margin-right: auto;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--lightblue);
+    }
+  }
+}
+
+/*
+==========================
+  Checkout
+========================== */
+.pmpro_checkout h3 span.pmpro_checkout-h3-name {
+  @extend .type-lightblue;
+  margin-bottom: var(--m);
+}
+
+.pmpro_checkout-h3-msg {
+  @extend .pmpro_btn;
+  padding: var(--xs);
+  border-radius: 4px;
+}
+
+.pmpro_checkout h3 span.pmpro_checkout-h3-msg {
+  @extend .type-tiny;
+  font-style: normal;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+#pmpro_form .pmpro_checkout h3 {
+  padding-top: var(--s);
+  margin-top: var(--m);
+}
+
+form.pmpro_form {
+
+  label {
+    @extend .type-tiny;
+    font-weight: normal;
+    // margin-bottom: var(--xs);
+  }
+
+  .input {
+    width: 100%;
+    max-width: 100%;
+    border-bottom: 1px solid var(--blue);
+    padding: var(--xs) 0;
+    @extend .type-small;
+    color: var(--lightblue);
+    // border-radius: var(--border-radius);
+  }
+
+  .pmpro_message {
+    background-color: var(--lightblue);
+    color: white;
+    @extend .type-tiny;
+
+    .pmpro_alert a {
+      color: white;
+    }
+  }
+
+  textarea#description {
+    border-radius: var(--border-radius);
+    border: 1px solid var(--blue);
+    margin-top: var(--xs);
+  }
+}
+
+// Adjust asterix
+.pmpro_checkout-field {
+  position: relative;
+  span.pmpro_asterisk {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
+form.pmpro_form input[type=text].input, form.pmpro_form input[type=password].input, .pmpro_login_wrap form#loginform input[type=text].input, .pmpro_login_wrap form#loginform input[type=password].input {
+  @include mobile {
+    width: 100%;
+  }
+}
+
+.pmpro_confirmation_wrap {
+  .pmpro_actions_nav {
+    margin-top: var(--m);
+  }
+}
+
+.pmpro_checkout_box-checkout_boxes {
+  margin-top: var(--m);
+  border-top: 1px solid var(--blue);
+  padding-top: var(--s);
+
+  > h3 {
+    margin-bottom: var(--s);
+  }
+}
+
+// WP AVATAR
+.wpua-edit {
+  border-top: 1px solid var(--blue);
+  padding-top: var(--s);
+  margin-top: var(--m);
+
+  h3 {
+    @extend .type-med;
+    margin-bottom: var(--m);
+  }
+
+  p#wpua-upload-button-existing {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  button#wpua-upload-existing, button#wpua-remove-existing, button#wpua-undo-existing, input#submit, button#wpua-add-existing {
+    @extend .pmpro_btn;
+    @extend .type-tiny;
+    min-width: 10em;
+    height: 1.75em;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  p#wpua-upload-messages-existing {
+    display: flex;
+    flex-direction: column;
+    @extend .type-tiny;
+  }
+
+  #wpua-images-existing {
+    @extend .type-tiny;
+
+    img {
+      width: auto;
+    }
+  }
+
+  #wpua-thumbnail-existing {
+    img {
+      border-radius: 50%;
+      border: 1px solid var(--blue);
+      overflow: hidden;
+    }
+  }
+
+  span#wpua-edit-attachment-existing {
+    display: none;
+  }
+}
+
+/*
+==========================
+  Invoices 
+========================== */
+.pmpro_table {
+  text-align: left;
+  margin-bottom: var(--m);
+
+  thead {
+    @extend .type-tiny;
+    color: var(--lightblue);
+  }
+}
+
+/*
+==========================
+  Invoice 
+========================== */
+.pmpro_invoice_wrap {
+  border-top: 1px solid var(--blue);
+  padding-top: var(--s);
+  margin-bottom: var(--l);
+
+  h3 {
+    color: var(--lightblue);
+    margin-bottom: var(--s);
+  }
+
+  .pmpro_a-print {
+    @extend .type-tiny;
+  }
+
+  ul {
+    margin-bottom: var(--s);
+  }
+
+  .pmpro_grey {
+    color: var(--lightblue);
   }
 }

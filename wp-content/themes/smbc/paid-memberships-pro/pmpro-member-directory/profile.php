@@ -288,31 +288,25 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php } ?>
 				<?php if(!empty($show_name) && !empty($pu->display_name) ) { ?>
 					<h2 class="pmpro_member_directory_name">
-						<?php echo esc_html( pmpro_member_directory_get_member_display_name( $pu ) ); ?>
+            <span><?php echo esc_html( pmpro_member_directory_get_member_display_name( $pu ) ); ?></span>
 					</h2>
-				<?php } ?>
-				<?php if(!empty($show_bio) && !empty($pu->description) ) { ?>
-					<p class="pmpro_member_directory_bio">
-						<strong><?php _e('Biographical Info', 'pmpromd'); ?></strong>
-						<?php echo $pu->description; ?>
-					</p>
 				<?php } ?>
 				<?php if(!empty($show_email)) { ?>
 					<p class="pmpro_member_directory_email">
 						<strong><?php _e('Email Address', 'pmpromd'); ?></strong>
-						<?php echo $pu->user_email; ?>
+						<span><?php echo $pu->user_email; ?></span>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_level)) { ?>
 					<p class="pmpro_member_directory_level">
 						<strong><?php _e('Level', 'pmpromd'); ?></strong>
-						<?php echo ! empty( $pu->membership_levels ) ? $pu->membership_levels : ''; ?>
+						<span><?php echo ! empty( $pu->membership_levels ) ? $pu->membership_levels : ''; ?></span>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_startdate)) { ?>
 					<p class="pmpro_member_directory_date">
 						<strong><?php _e('Start Date', 'pmpromd'); ?></strong>
-						<?php echo !empty( $pu->membership_level ) ? date(get_option("date_format"), $pu->membership_level->startdate) : ''; ?>
+						<span><?php echo !empty( $pu->membership_level ) ? date(get_option("date_format"), $pu->membership_level->startdate) : ''; ?></span>
 					</p>
 				<?php } ?>
 				<?php if(!empty($show_billing) && !empty($pu->pmpro_baddress1)) { ?>
@@ -332,7 +326,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 				<?php if(!empty($show_phone) && !empty($pu->pmpro_bphone)) { ?>
 					<p class="pmpro_member_directory_phone">
 						<strong><?php _e('Phone Number','pmpromd'); ?></strong>
-						<?php echo formatPhone($pu->pmpro_bphone); ?>
+						<span><?php echo formatPhone($pu->pmpro_bphone); ?></span>
 					</p>
 				<?php } ?>
 				<?php
@@ -365,7 +359,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										//this is a file field
 										?>
 										<strong><?php echo $field[0]; ?></strong>
-										<?php echo pmpromd_display_file_field($meta_field); ?>
+										<span><?php echo pmpromd_display_file_field($meta_field); ?></span>
 										<?php
 									}elseif(is_array($meta_field)){
 										//this is a general array, check for Register Helper options first
@@ -375,14 +369,14 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										}
 										?>
 										<strong><?php echo $field[0]; ?></strong>
-										<?php echo implode(", ",$meta_field); ?>
+										<span><?php echo implode(", ",$meta_field); ?></span>
 										<?php
 									}
 									elseif(!empty($rh_fields[$field[1]])  && is_array($rh_fields[$field[1]]) )
 									{
 									?>
 										<strong><?php echo $field[0]; ?></strong>
-										<?php echo $rh_fields[$field[1]][$meta_field]; ?>
+										<span><?php echo $rh_fields[$field[1]][$meta_field]; ?></span>
 										<?php
 									}
 									else
@@ -397,7 +391,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 										{
 											?>
 											<strong><?php echo $field[0]; ?></strong>
-											<?php
+											<span><?php
 												$meta_field_embed = wp_oembed_get($meta_field);
 												if(!empty($meta_field_embed)){
 													echo $meta_field_embed;
@@ -416,7 +410,13 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 							}
 						}
 					}
-				?>
+        ?>
+        <?php if(!empty($show_bio) && !empty($pu->description) ) { ?>
+					<div class="pmpro_member_directory_bio border-top--blue">
+						<h3 class="type-small margin-btm--s"><?php _e('What Our Business Does Best', 'pmpromd'); ?></h3>
+						<?php echo wpautop( $pu->description ); ?>
+          </div>
+				<?php } ?>
 				<?php do_action( 'pmpro_member_profile_after', $pu ); ?>
 				<div class="pmpro_clear"></div>
 			</div>			
@@ -463,7 +463,7 @@ function pmpromd_profile_shortcode($atts, $content=null, $code="")
 							'title' => array(),
 						),
 					);
-					echo wp_kses( implode( pmpro_actions_nav_separator(), $pmpro_member_profile_action_links ), $allowed_html );
+					echo wp_kses( implode( '', $pmpro_member_profile_action_links ), $allowed_html );
 				?>
 			</p> <!-- end pmpro_actions_nav -->
 			<?php

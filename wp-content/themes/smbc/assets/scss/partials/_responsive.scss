@@ -9,13 +9,16 @@
 }
 
 @media all and (max-width: 900px) {
+  html {
+    font-size: 8px;
+  }
   /*
 ==========================
   Header
 ========================== */
-  header {
-    display: none;
-  }
+  // header {
+  //   display: none;
+  // }
 
   /*
   ==========================
@@ -120,7 +123,9 @@
   }
 
   .landing-intro__right {
-    display: none;
+    width: 100%;
+    max-height: 30rem;
+    overflow: hidden;
   }
 
   // Landing Banner
@@ -211,13 +216,13 @@
   --------------------------
     News
   -------------------------- */
-  .home-news {
-    display: none;
-  }
+  // .home-news {
+  //   display: none;
+  // }
 
-  .news-blocks {
-    display: none;
-  }
+  // .news-blocks {
+  //   grid-template-columns: repeat(2, 1fr);
+  // }
 
   /*
   --------------------------
@@ -264,6 +269,7 @@
   ========================== */
   .testimonial {
     display: flex;
+    flex-direction: column;
   }
 
   .testimonial__left {
@@ -271,7 +277,8 @@
   }
 
   .testimonial__right {
-    width: calc(100% / 3);
+    width: 100%;
+    height: 50rem;
   }
 
   /*
@@ -280,7 +287,7 @@
   -------------------------- */
   .memberships-grid {
     display: grid;
-    grid-template-rows: repeat(4, auto);
+    // grid-template-rows: repeat(4, auto);
 
     > div {
       border-top: 1px solid var(--blue);
@@ -338,16 +345,16 @@
     }
   }
 
-  .event__details {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: var(--s);
-    grid-row-gap: var(--s);
+  // .event__details {
+  //   display: grid;
+  //   grid-template-columns: repeat(3, 1fr);
+  //   grid-column-gap: var(--s);
+  //   grid-row-gap: var(--s);
 
-    > div {
-      padding-top: var(--s);
-    }
-  }
+  //   > div {
+  //     padding-top: var(--s);
+  //   }
+  // }
 
   .event-panel {
     max-height: 0;
@@ -358,13 +365,11 @@
   .event-panel-inner {
     padding: var(--m);
     padding-top: 0;
+    border-top: 1px solid var(--blue);
   }
 
   .event-panel__left {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-items: flex-start;
+    display: none;
   }
 
   .event-panel__link {

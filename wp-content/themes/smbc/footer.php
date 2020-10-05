@@ -9,12 +9,27 @@
     <div class="grid-item">
       <h1 class="type-tiny margin-btm--s type-strong">Quick Links</h1>
       <ul class="type-tiny"> 
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Events</a></li>
-        <li><a href="#">News</a></li>
-        <li><a href="#">Log In</a></li>
-        <li><a href="#">Join</a></li>
+        <li><a href="<?= get_permalink( get_page_by_title('about') ) ?>">About</a></li>
+        <li><a href="<?= get_permalink( get_page_by_title('Events') ) ?>">Events</a></li>
+        <li><a href="<?= get_permalink( get_page_by_title('News') ) ?>">News</a></li>
+        <?php $user = wp_get_current_user() ?>
+        <?php if ( $user->exists() ) : ?>
+          <li class="type-lightblue"><a href="<?= get_permalink( get_page_by_title('Directory') ) ?>">Directory</a></li>
+          <li class="type-lightblue"><a href="<?= get_permalink( get_page_by_title('Profile') ) ?>">Profile</a></li>
+        <?php else: ?>
+          <li class="type-lightblue"><a href="<?= get_permalink( get_page_by_title('Membership Checkout') ) ?>">Join</a></li>
+        <?php endif ?>
+        <li>
+          <button class="type-tiny login__open type-lightblue">
+            <?php 
+              if ( $user->exists() ) :
+                echo 'Logout';
+              else:
+                echo 'Login';
+              endif;
+            ?>
+          </button>
+        </li>
       </ul>
     </div>
 
