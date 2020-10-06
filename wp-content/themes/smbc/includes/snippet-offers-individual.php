@@ -88,7 +88,13 @@
               <div class="profile-co-block" data-post-id="<?php echo $com_offer['offer_id']; ?>">
                 <h2 class="type-med margin-btm--s"><?php echo $com_offer['offer_title']; ?></h2>
                 <p><?php echo $com_offer['offer_details']; ?></p>
-                <button data-post-id="<?php echo $com_offer['offer_id']; ?>" data-sender-id="<?php echo get_current_user_id(); ?>" data-recipient-id="<?php echo get_post_field('post_author', $com_offer['offer_id']); ?>" class="send_msg">Get in Touch</button>
+                
+                <?php $cur_u_i = get_current_user_id() ?>
+                <?php if ( get_user_meta($cur_u_i, 'user_cp_dct' , true) == 0 ) : ?>
+                  <button>No Connection Points remaining</button>
+                <?php else: ?>
+                  <button data-post-id="<?php echo $com_offer['offer_id']; ?>" data-sender-id="<?php echo get_current_user_id(); ?>" data-recipient-id="<?php echo get_post_field('post_author', $com_offer['offer_id']); ?>" class="send_msg">Get in Touch</button>
+                <?php endif ?>
               </div>
             </div>
             <br>

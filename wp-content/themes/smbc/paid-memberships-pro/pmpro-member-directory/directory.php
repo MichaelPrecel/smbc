@@ -188,11 +188,11 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
         <h2 class="type-small type-strong margin-btm--s">Profile Summary</h2>
         <ul class="type-tiny margin-btm--s">
           <?php
-            $cur_u_i = get_current_user_id(); 
+            $cur_u_i = get_current_user_id();
             $my_offers = dctit_list_offer($cur_u_i);
           ?>
           <li>Membership Level:<br><span class="type-lightblue">Premium Member</span></li>
-          <li>Connections Remaining: <span class="type-lightblue">3</span></li>
+          <li>Connections Remaining: <span class="type-lightblue"><?= get_user_meta($cur_u_i, 'user_cp_dct' , true); ?></span></li>
           <li>Current Community Offers: <span class="type-lightblue"><?= count( $my_offers ) ?></span></li>
         </ul>
         <a class="link-button type-tiny" href="<?= get_permalink( get_page_by_title('profile') ) ?>#ind-co">Community Offers</a>
@@ -462,9 +462,13 @@ $sqlQuery = $sql_parts['SELECT'] . $sql_parts['JOIN'] . $sql_parts['WHERE'] . $s
                                 <input type="hidden" name="post_type" value="directory">
                                 <input type="hidden" name="sender_id" value="<?php echo get_current_user_id(); ?>">
                                 <input type="hidden" name="recipient_id" value="<?php echo $auser->ID; ?>">
-                                <input type="text" placeholder="Reason for connection" required>
-                                <input class="margin-btm--s" type="text" placeholder="Message" required>
-                                <input type="submit" value="Send Request">
+                                <input type="text" name="reason_for_connection" placeholder="Reason for connection..." required>
+                                <input class="margin-btm--s" type="text" name="message" placeholder="Message" required>
+                                <?php if ( get_user_meta($cur_u_i, 'user_cp_dct' , true) == 0 ) : ?>
+                                  <p class="pmpro_btn type-tiny margin-top--s" style="white-space:normal; margin-top: var(--s)">No connection points remaining</p>
+                                <?php else: ?>
+                                  <input type="submit" value="Send Request">
+                                <?php endif ?>
                               </form>
                             </div>
                           </div>

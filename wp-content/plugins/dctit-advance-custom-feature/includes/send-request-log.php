@@ -43,24 +43,23 @@ function dct_onetoonelog_entries()
         $dct_array_key_size = count($dct_db_select_key_arr);
         $dct_connect_single_entry = $wpdb->get_results($dct_query, 'ARRAY_N');
         
-        
         $sender_name = $dct_connect_single_entry[0][2];
         $sender_email = $dct_connect_single_entry[0][4];
-        $recipient_email = $dct_connect_single_entry[0][5];
+        $sender_reason = $dct_connect_single_entry[0][7];
+        $sender_message = $dct_connect_single_entry[0][6];
         
         //connect two parties
         $admin_email = get_option( 'admin_email' );
         $headers[] = 'From: '.$sender_name.' <'.$sender_email.'>';
         $headers[] = 'Cc: Site Admin <'.$admin_email.'>';
-        $subject = "Mr ".$sender_name." say's HELLO!";
-        $message = "This is message body.";
+        $subject = $sender_reason;
+        $message = $sender_message;
         $success = wp_mail( $recipient_email, $subject, $message, $headers );
         if($success){
-            //change the pending into connected.
-            $data = [ 'status' => 'Connected' ]; // NULL value.
-            $where = [ 'id' => intval($log_id) ]; // NULL value in WHERE clause.
-            $wpdb->update( $wpdb->prefix . 'send_request_log', $data, $where ); // Also works in this case.
-
+          //change the pending into connected.
+          $data = [ 'status' => 'Connected' ]; // NULL value.
+          $where = [ 'id' => intval($log_id) ]; // NULL value in WHERE clause.
+          $wpdb->update( $wpdb->prefix . 'send_request_log', $data, $where ); // Also works in this case.
         }
         wp_reset_query();
     }
