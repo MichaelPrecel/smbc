@@ -47,6 +47,7 @@ function dct_onetoonelog_entries()
         $sender_email = $dct_connect_single_entry[0][4];
         $sender_reason = $dct_connect_single_entry[0][7];
         $sender_message = $dct_connect_single_entry[0][6];
+        $recipient_email = $dct_connect_single_entry[0][5];
         
         //connect two parties
         $admin_email = get_option( 'admin_email' );
