@@ -92,14 +92,6 @@
             $my_query->the_post();
         ?>
 
-        <!-- <li>
-          <div class="relatedthumb"><a href="<?php the_permalink()?>" rel="bookmark" title="<?php the_title(); ?>"><?php the_post_thumbnail(); ?></a></div>
-            <div class="relatedcontent">
-            <h3><a href="<?php the_permalink()?>" rel="bookmark" title="<?php the_title(); ?>"><?php the_title(); ?></a></h3>
-            <?php the_time('M j, Y') ?>
-            </div>
-        </li> -->
-
         <div class="news-block">
           <a href="<?= the_permalink() ?>" class="ratio-box ratio--3-2">
             <?php if ( $image = get_field('hero_image') ) {
@@ -126,10 +118,10 @@
 
   <div class="landing-banner">
     <div class="landing-banner__left bg-lightblue border-top--blue">
-      <p class="type-small type-white">Eu molestie feugiat tortor ac dis erat. Vel ultrices.</p>
+      <p class="type-small type-white">As a member of our community, you'll have access to thoughtful insights and vital connections.</p>
     </div>
     <div class="landing-banner__right bg-blue flex-center">
-      <p class="type-white type-small"><a class="link-arrow-right link-arrow-right--white" href="#">Back to News</a></p>
+      <p class="type-white type-small"><a class="link-arrow-right link-arrow-right--white" href="<?= get_permalink( get_page_by_title('news') ) ?>">Back to News</a></p>
     </div>
   </div>
 </main>

@@ -387,18 +387,18 @@
   ========================== */
   // Article outer / grid
   .article-grid {
-    display: grid;
+    display: block;
     grid-template-columns: repeat(12, 1fr);
     grid-column-gap: var(--s);
 
     > div {
       overflow: hidden;
+      margin-bottom: var(--m);
     }
 
     > .article__sticky {
-      grid-column-start: 1;
-      grid-column-end: 4;
-      overflow: initial;
+      padding-bottom: var(--s);
+      border-bottom: 1px solid var(--blue);
     }
   }
 

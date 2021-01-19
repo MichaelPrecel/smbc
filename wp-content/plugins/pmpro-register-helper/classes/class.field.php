@@ -92,6 +92,13 @@
 			if(in_array($this->name, $public_query_vars))
 				$this->name = "pmprorhprefix_" . $this->name;
 
+			// Save wp_users table fields to the WP_User, not usermeta.
+			$user_table_fields = apply_filters( 'pmprorh_user_table_fields', array( 'user_url' ) );
+			if ( in_array( $this->name, $user_table_fields ) ) {
+				//use the save date function
+				$this->save_function = array( $this, 'saveUsersTable' );
+			}
+
 			//default fields						
 			if($this->type == "text")
 			{
@@ -128,6 +135,14 @@
 			}	
 			elseif($this->type == "file")
 			{
+				// Default to file preview if image type.
+				if ( ! isset( $this->preview ) ) {
+					$this->preview = true;
+				}
+				// Default to allow file delete if full source known.
+				if ( ! isset( $this->allow_delete ) ) {
+					$this->allow_delete = 'only_admin';
+				}
 				//use the file save function
 				$this->save_function = array($this, "saveFile");
 			}
@@ -147,7 +162,21 @@
 			
 			return true;
 		}
-		
+
+		// Save function for users table field.
+		function saveUsersTable( $user_id, $name, $value ) {
+			// Special sanitization needed for certain user fields.
+			if ( $name === 'user_url' ) {
+				$value = esc_url_raw( $value );
+			}
+			if ( $name === 'user_nicename' ) {
+				$value = sanitize_title( $value );
+			}
+
+			// Save updated profile fields.
+			wp_update_user( array( 'ID' => $user_id, $name => $value ) );
+		}
+
 		//save function for files
 		function saveFile($user_id, $name, $value)
 		{			
@@ -156,12 +185,34 @@
 			$user = get_userdata($user_id);
 			$meta_key = str_replace("pmprorhprefix_", "", $name);
 
+			// deleting?
+			if( isset( $_REQUEST['pmprorh_delete_file_' . $name . '_field'] ) ) {
+				$delete_old_file_name = $_REQUEST['pmprorh_delete_file_' . $name . '_field'];
+				if ( ! empty( $delete_old_file_name ) ) {
+					$old_file_meta = get_user_meta( $user->ID, $meta_key, true );					
+					if ( 
+						! empty( $old_file_meta ) && 
+						! empty( $old_file_meta['fullpath'] ) && 
+						file_exists( $old_file_meta['fullpath'] ) &&
+						$old_file_meta['filename'] ==  $delete_old_file_name
+					) {				
+						unlink( $old_file_meta['fullpath'] );
+						if ( ! empty( $old_file_meta['previewpath'] ) ) {
+							unlink( $old_file_meta['previewpath'] );
+						}
+						delete_user_meta( $user->ID, $meta_key );
+					}
+				}
+			}
+
 			//no file?
-			if(empty($file['name']))
+			if(empty($file['name'])) {
 				return;
-			
+			}
+
 			//check extension against allowed extensions
-			$filetype = wp_check_filetype_and_ext($file['tmp_name'], $file['name']);									
+			$filetype = wp_check_filetype_and_ext($file['tmp_name'], $file['name']);
+
 			if((!$filetype['type'] || !$filetype['ext'] ) && !current_user_can( 'unfiltered_upload' ))
 			{			
 				//we throw an error earlier, but this just bails on the upload just in case
@@ -219,10 +270,10 @@
 			}
 						
 			//if we already have a file for this field, delete it
-			$old_file = get_user_meta($user->ID, $meta_key, true);			
+			$old_file = get_user_meta($user->ID, $meta_key, true);
 			if(!empty($old_file) && !empty($old_file['fullpath']) && file_exists($old_file['fullpath']))
 			{				
-				unlink($old_file['fullpath']);				
+				unlink($old_file['fullpath']);
 			}
 			
 			//figure out new filename
@@ -255,8 +306,31 @@
 				move_uploaded_file($file['tmp_name'], $pmprorh_dir . $filename);				
 			}
 			
+			// If file is an image, save a preview thumbnail.
+			if ( $filetype && 0 === strpos( $filetype['type'], 'image/' ) ) {
+				$preview_file = wp_get_image_editor( $pmprorh_dir . $filename );
+				if ( ! is_wp_error( $preview_file ) ) {
+					$preview_file->resize( 200, NULL, false );
+					$preview_file->generate_filename( 'pmprorh_preview' );
+					$preview_file = $preview_file->save();
+				}
+			}
+
+			$file_meta_value_array = array(
+				'original_filename'	=> $file['name'],
+				'filename'			=> $filename,
+				'fullpath'			=> $pmprorh_dir . $filename,
+				'fullurl'			=> content_url('/uploads/pmpro-register-helper/' . $user->user_login . '/' . $filename),
+				'size'				=> $file['size'],
+			);
+
+			if ( ! empty( $preview_file ) && ! is_wp_error( $preview_file ) ) {
+				$file_meta_value_array['previewpath'] = $preview_file['path'];
+				$file_meta_value_array['previewurl'] = content_url('/uploads/pmpro-register-helper/' . $user->user_login . '/' . $preview_file['file'] );
+			}
+
 			//save filename in usermeta
-			update_user_meta($user_id, $meta_key, array("original_filename"=>$file['name'], "filename"=>$filename, "fullpath"=> $pmprorh_dir . $filename, "fullurl"=>content_url("/uploads/pmpro-register-helper/" . $user->user_login . "/" . $filename), "size"=>$file['size']));			
+			update_user_meta($user_id, $meta_key, $file_meta_value_array );			
 		}
 
         //fix date then update user meta
@@ -264,7 +338,7 @@
         {
 	        if ( isset( $this->sanitize ) && true === $this->sanitize ) {
 
-		        $value = pmprorh_sanitize( $value );
+		        $value = pmprorh_sanitize( $value, $this );
 	        }
 
         	$meta_key = str_replace("pmprorhprefix_", "", $name);
@@ -413,6 +487,7 @@
 					$r .= '>' . $option . '</option>';
 				}
 				$r .= '</select>';
+				$r .= '<input type="hidden" name="'.$this->name.'_checkbox" value="1" />';	// Extra field so we can track unchecked boxes. Naming just for consistency.
 				
 				if(!empty($this->select2options))
 					$r .= '<script>jQuery(document).ready(function($){ $("#' . $this->id . '").select2({' . $this->select2options . '}); });</script>';
@@ -476,12 +551,11 @@
                          $this->name,
                         $ovalue,
 						"{$this->id}_{$counter}",
-                        $this->id . ' ' . $class,
+                        $this->id . ' ' . str_replace( 'pmpro_required pmpro-required', '', $class ), // Don't show every option as required.
                         ( in_array($ovalue, $value) ? 'checked="checked"' : null ),
                         ( !empty( $this->readonly ) ? 'readonly="readonly"' : null ),
                         $this->getHTMLAttributes()
-                    );
-     
+					);     
 					
 					$r .= sprintf( ' <label class="pmprorh_checkbox_label pmpro_label-inline pmpro_clickable" for="%1$s">%2$s</label>', "{$this->id}_{$counter}",$option );
 					$r .= sprintf( '<input type="hidden" name="%1$s_checkbox[]" value="%2$s" />', $this->name, $ovalue );	//extra field so we can track unchecked boxes
@@ -535,8 +609,10 @@
 					$r .= 'class="' . $this->class . '" ';
 				if(!empty($this->html_attributes))
 					$r .= $this->getHTMLAttributes();
-				$r .= 'name="' . $this->name . '" />';								
-				
+				if(!empty($this->readonly))
+					$r .= 'disabled="disabled" ';
+				$r .= 'name="' . $this->name . '" />';
+
 				//old value
 				if(is_user_logged_in())
 				{
@@ -545,24 +621,55 @@
 					if(!empty($old_value))
 						$r .= '<input type="hidden" name="' . $this->name . '_old" value="' . esc_attr($old_value['filename']) . '" />';
 				}
-				
+
+				// Show a preview of existing file if image type.
+				if ( ( ! empty( $this->preview ) ) && ! empty( $value ) && ! empty( $this->file['previewurl'] ) ) {
+					$filetype = wp_check_filetype( basename( $this->file['previewurl'] ), null );
+					if ( $filetype && 0 === strpos( $filetype['type'], 'image/' ) ) {
+						$r_end .= '<div class="pmprorh_file_preview"><img src="' . $this->file['previewurl'] . '" alt="' . basename($value) . '" /></div>';
+					}
+				}
+
 				//show name of existing file
 				if(!empty($value))
 				{
 					if(!empty($this->file['fullurl']))
-						$r_end .= '<small class="lite">Current File: <a target="_blank" href="' . $this->file['fullurl'] . '">' . basename($value) . '</a></small>';
+						$r_end .= '<span class="pmprorh_file_' . $this->name . '_name">' . sprintf(__('Current File: %s', 'pmpro-register-helper' ), '<a target="_blank" href="' . $this->file['fullurl'] . '">' . basename($value) . '</a>' ) . '</span>';
 					else
-						$r_end .= '<small class="lite">Current File: ' . basename($value) . '</small>';
+						$r_end .= sprintf(__('Current File: %s', 'pmpro-register-helper' ), basename($value) );
+
+					// Allow user to delete the uploaded file if we know the full location. 
+					if ( ( ! empty( $this->allow_delete ) ) && ! empty( $this->file['fullurl'] ) ) {
+						// Check whether the current user can delete the uploaded file based on the field attribute 'allow_delete'.
+						if ( $this->allow_delete === true || 
+							( $this->allow_delete === 'admins' || $this->allow_delete === 'only_admin' && current_user_can( 'manage_options', $current_user->ID ) )
+						) {
+ 						$r_end .= '&nbsp;&nbsp;<button class="pmprorh_delete_restore_file" id="pmprorh_delete_file_' . $this->name . '_button" onclick="return false;">' . __( '[delete]', 'pmpro-register-helper' ) . '</button>';
+						$r_end .= '<button class="pmprorh_delete_restore_file" id="pmprorh_cancel_delete_file_' . $this->name . '_button" style="display: none;" onclick="return false;">' . __( '[restore]', 'pmpro-register-helper' ) . '</button>';
+						$r_end .= '<input id="pmprorh_delete_file_' . $this->name . '_field" name="pmprorh_delete_file_' . $this->name . '_field" type="hidden" value="0" />';
+						}
+					}
 				}
-			
-				if(!empty($this->readonly))
-					$r .= 'readonly="readonly" ';
 				
-				//include script to change enctype of the form
+				//include script to change enctype of the form and allow deletion
 				$r .= '
 				<script>
 					jQuery(document).ready(function() {
 						jQuery("#' . $this->id . '").closest("form").attr("enctype", "multipart/form-data");
+
+						jQuery("#pmprorh_delete_file_' . $this->name . '_button").click(function(){
+							jQuery("#pmprorh_delete_file_' . $this->name . '_field").val("' . basename($value) . '");
+							jQuery(".pmprorh_file_' . $this->name . '_name").css("text-decoration", "line-through");
+							jQuery("#pmprorh_cancel_delete_file_' . $this->name . '_button").show();
+							jQuery("#pmprorh_delete_file_' . $this->name . '_button").hide();
+						});
+
+						jQuery("#pmprorh_cancel_delete_file_' . $this->name . '_button").click(function(){
+							jQuery("#pmprorh_delete_file_' . $this->name . '_field").val(0);
+							jQuery(".pmprorh_file_' . $this->name . '_name").css("text-decoration", "none");
+							jQuery("#pmprorh_delete_file_' . $this->name . '_button").show();
+							jQuery("#pmprorh_cancel_delete_file_' . $this->name . '_button").hide();
+						});
 					});
 				</script>
 				';
@@ -633,12 +740,8 @@
 			if(defined('IS_PROFILE_PAGE') && IS_PROFILE_PAGE && !apply_filters('pmprorh_show_required_on_profile', false, $this))
 				$this->showrequired = false;
 
-			if(!empty($this->required) && !empty($this->showrequired) && $this->showrequired !== 'label')
-			{
-				if(is_string($this->showrequired))
+			if ( ! empty( $this->required ) && ! empty( $this->showrequired ) && is_string( $this->showrequired ) && $this->showrequired !== 'label' ) {
 					$r .= $this->showrequired;
-				else
-					$r .= '<span class="pmpro_asterisk"> <abbr title="Required Field">*</abbr></span>';
 			}
 
 			//anything meant to be added to the beginning or end?
@@ -662,6 +765,7 @@
 		
 		function getDependenciesJS()
 		{
+			global $pmprorh_registration_fields;
 			//dependencies
 			if(!empty($this->depends))
 			{					
@@ -671,11 +775,23 @@
 				{
 					if(!empty($check['id']))
 					{
-						$checks[] = "((jQuery('#" . $check['id']."')".".is(':checkbox')) "
-						 ."? jQuery('#" . $check['id'] . ":checked').length > 0"
-						 .":(jQuery('#" . $check['id'] . "').val() == " . json_encode($check['value']) . " || jQuery.inArray( jQuery('#" . $check['id'] . "').val(), " . json_encode($check['value']) . ") > -1)) ||"."(jQuery(\"input:radio[name='".$check['id']."']:checked\").val() == ".json_encode($check['value'])." || jQuery.inArray(".json_encode($check['value']).", jQuery(\"input:radio[name='".$check['id']."']:checked\").val()) > -1)";
+						// If checking grouped_checkbox, need to update the $check['id'] with index of option.
+						$field_id = $check['id'];
+						$depends_checkout_box = PMProRH_Field::get_checkout_box_name_for_field( $field_id );
+						if ( empty( $depends_checkout_box ) ) {
+							continue;
+						}
+						foreach ( $pmprorh_registration_fields[ $depends_checkout_box ] as $field ) {
+							if ( $field->type === 'checkbox_grouped' && $field->name === $field_id && ! empty( $field->options ) ) {
+								$field_id = $field_id . '_' . intval( array_search( $check['value'], array_keys( $field->options ) )+1 );
+							}
+						}
+
+						$checks[] = "((jQuery('#" . $field_id ."')".".is(':checkbox')) "
+						 ."? jQuery('#" . $field_id . ":checked').length > 0"
+						 .":(jQuery('#" . $field_id . "').val() == " . json_encode($check['value']) . " || jQuery.inArray( jQuery('#" . $field_id . "').val(), " . json_encode($check['value']) . ") > -1)) ||"."(jQuery(\"input:radio[name='".$check['id']."']:checked\").val() == ".json_encode($check['value'])." || jQuery.inArray(".json_encode($check['value']).", jQuery(\"input:radio[name='".$field_id."']:checked\").val()) > -1)";
 					
-						$binds[] = "#" . $check['id'].",input:radio[name=".$check['id']."]";
+						$binds[] = "#" . $field_id .",input:radio[name=". $field_id ."]";
 					}				
 				}
 								
@@ -764,6 +880,13 @@
 				}
 				else
 					$value = $meta;									
+			} elseif ( ! empty( $current_user->ID ) ) {
+				$userdata = get_userdata( $current_user->ID );
+				if ( ! empty( $userdata->{$this->name} ) ) {
+					$value = $userdata->{$this->name};
+				} else {
+					$value = '';
+				}
 			}
 			elseif(!empty($this->value))
 				$value = $this->value;
@@ -773,9 +896,14 @@
 			//update class value for div and field element
 			$this->class .= " " . pmpro_getClassForField($this->name);
 			
-			// add default pmpro-required class to field.
+			// add default pmpro_required class to field.
 			if ( ! empty( $this->required ) ) {
-				$this->class .= " pmpro-required";
+				$this->class .= " pmpro_required pmpro-required"; // pmpro-required was in a previous version. Keeping it in case someone is using it.
+				$this->divclass .= " pmpro_checkout-field-required";
+			}
+
+			if ( empty( $this->showrequired ) || is_string( $this->showrequired ) ) {
+				$this->divclass .= " pmpro_checkout-field-hide-required";
 			}
 			
 			$this->divclass .= " pmpro_checkout-field-" . $this->type;
@@ -786,7 +914,7 @@
 					<?php 
 						if(!empty($this->required) && !empty($this->showrequired) && $this->showrequired === 'label')
 						{
-						?><span class="pmpro_asterisk"> *</span><?php
+						?><span class="pmprorh_asterisk"> <abbr title="Required Field">*</abbr></span><?php
 						}
 					?>
 					<?php $this->display($value); ?>
@@ -869,5 +997,93 @@
 		//from: http://stackoverflow.com/questions/173400/php-arrays-a-good-way-to-check-if-an-array-is-associative-or-numeric/4254008#4254008
 		function is_assoc($array) {			
 			return (bool)count(array_filter(array_keys($array), 'is_string'));
+		}
+
+		static function get_checkout_box_name_for_field( $field_name ) {
+			global $pmprorh_registration_fields;
+			foreach( $pmprorh_registration_fields as $checkout_box_name => $fields ) {
+				foreach($fields as $field) {
+					if( $field->name == $field_name ) {
+						return $checkout_box_name;
+					}
+				}
+			}
+			return '';
+		}
+
+		function was_present_on_checkout_page() {
+			// Check if checkout box that field is in is on page.
+			$checkout_box = PMProRH_Field::get_checkout_box_name_for_field( $this->name );
+			if ( empty( $checkout_box ) ) {
+				// Checkout box does not exist.
+				return false;
+			}
+
+			$user_fields_locations = array(
+				'after_username',
+				'after_password',
+				'after_email',
+				'after_captcha',
+			);
+			if ( is_user_logged_in() && in_array( $checkout_box, $user_fields_locations ) ) {
+				// User is logged in and field is only for new users.
+				return false;
+			}
+			
+			// Check if field is hidden because of "depends" option.
+			if ( ! empty( $this->depends ) ) {					
+				//build the checks
+				$checks = array();
+				foreach($this->depends as $check) {
+					if( ! empty( $check['id'] ) && isset( $check['value'] ) ) {
+						// We have a valid depends statement.
+						if ( isset( $_REQUEST[ $check['id'] . '_checkbox' ] ) ) {
+							// This fields depends on a checkbox or checkbox_grouped input.
+							if ( isset( $_REQUEST[ $check['id'] ] ) && is_array( $_REQUEST[ $check['id'] ] ) ) {
+								// checkbox_grouped input.
+								if ( ! in_array( $check['value'], $_REQUEST[ $check['id'] ] ) ) {
+									return false;
+								}
+							} elseif ( isset( $_REQUEST[ $check['id'] ] ) && '1' === $_REQUEST[ $check['id'] ] ) {
+								// Single checkbox that is checked.
+								if ( empty( $check['value'] ) ) {
+									// Set to show field only if checkbox is unchecked.
+									return false;
+								}
+							} else {
+								// Single checkbox that is unchecked. Set to show field only if checkbox is checked.
+								if ( ! empty( $check['value'] ) ) {
+									return false;
+								}
+							}
+						} elseif ( isset( $_REQUEST[ $check['id'] ] ) && $check['value'] != $_REQUEST[ $check['id'] ] ) {
+							// This fields depends on another field type.
+							return false;
+						}
+					}				
+				}
+			}
+
+			// Field should have been showed at checkout.
+			return true;
+		}
+
+		function was_filled_if_needed() {
+			// If field is never required or is not present on checkout page, return true.
+			if ( ! $this->required || ! $this->was_present_on_checkout_page() ) {
+				return true;
+			}
+
+			// Return whether the field is filled.
+			switch ( $this->type ) {
+				case 'text':
+				case 'textarea':
+				case 'number':
+					$filled = ( isset( $_REQUEST[$this->name] ) && '' !== trim( $_REQUEST[$this->name] ) );
+					break;
+				default:
+					$filled = ! ( empty( $_REQUEST[$this->name] ) && empty( $_FILES[$this->name]['name'] ) && empty( $_REQUEST[$this->name.'_old'] ) );
+			}
+			return $filled;
 		}
 	}

@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'SeriouslySimplePodcasting\\Ajax\\Ajax_Handler' => $baseDir . '/php/classes/ajax/class-ajax-handler.php',
     'SeriouslySimplePodcasting\\Blocks\\Castos_Blocks' => $baseDir . '/php/classes/blocks/class-castos-blocks.php',
     'SeriouslySimplePodcasting\\Controllers\\Admin_Controller' => $baseDir . '/php/classes/controllers/class-admin-controller.php',
@@ -16,6 +17,7 @@ return array(
     'SeriouslySimplePodcasting\\Controllers\\Frontend_Controller' => $baseDir . '/php/classes/controllers/class-frontend-controller.php',
     'SeriouslySimplePodcasting\\Controllers\\Import_Controller' => $baseDir . '/php/classes/controllers/class-import-controller.php',
     'SeriouslySimplePodcasting\\Controllers\\Options_Controller' => $baseDir . '/php/classes/controllers/class-options-controller.php',
+    'SeriouslySimplePodcasting\\Controllers\\Players_Controller' => $baseDir . '/php/classes/controllers/class-players-controller.php',
     'SeriouslySimplePodcasting\\Controllers\\Settings_Controller' => $baseDir . '/php/classes/controllers/class-settings-controller.php',
     'SeriouslySimplePodcasting\\Handlers\\Admin_Notifications_Handler' => $baseDir . '/php/classes/handlers/class-admin-notifications-handler.php',
     'SeriouslySimplePodcasting\\Handlers\\Castos_Handler' => $baseDir . '/php/classes/handlers/class-castos-handler.php',
@@ -25,6 +27,16 @@ return array(
     'SeriouslySimplePodcasting\\Handlers\\Upgrade_Handler' => $baseDir . '/php/classes/handlers/class-upgrade-handler.php',
     'SeriouslySimplePodcasting\\Helpers\\Log_Helper' => $baseDir . '/php/classes/helpers/class-log-helper.php',
     'SeriouslySimplePodcasting\\Importers\\Rss_Importer' => $baseDir . '/php/classes/importers/class-rss-importer.php',
+    'SeriouslySimplePodcasting\\Integrations\\Elementor\\Elementor_Template_Importer' => $baseDir . '/php/classes/integrations/elementor/class-elementor-template-importer.php',
+    'SeriouslySimplePodcasting\\Integrations\\Elementor\\Elementor_Widgets' => $baseDir . '/php/classes/integrations/elementor/class-elementor-widgets.php',
+    'SeriouslySimplePodcasting\\Integrations\\Elementor\\Widgets\\Elementor_Episode_List_Widget' => $baseDir . '/php/classes/integrations/elementor/widgets/elementor-episode-list-widget.php',
+    'SeriouslySimplePodcasting\\Integrations\\Elementor\\Widgets\\Elementor_Html_Player_Widget' => $baseDir . '/php/classes/integrations/elementor/widgets/elementor-html-player-widget.php',
+    'SeriouslySimplePodcasting\\Integrations\\Elementor\\Widgets\\Elementor_Media_Player_Widget' => $baseDir . '/php/classes/integrations/elementor/widgets/elementor-media-player-widget.php',
+    'SeriouslySimplePodcasting\\Integrations\\Elementor\\Widgets\\Elementor_Recent_Episodes_Widget' => $baseDir . '/php/classes/integrations/elementor/widgets/elementor-recent-episodes-widget.php',
+    'SeriouslySimplePodcasting\\Integrations\\Elementor\\Widgets\\Elementor_Select_Episode_Widget' => $baseDir . '/php/classes/integrations/elementor/widgets/elementor-select-episode-widget.php',
+    'SeriouslySimplePodcasting\\Integrations\\Elementor\\Widgets\\Elementor_Subscribe_Buttons_Widget' => $baseDir . '/php/classes/integrations/elementor/widgets/elementor-subscribe-buttons-widget.php',
+    'SeriouslySimplePodcasting\\Renderers\\Renderer' => $baseDir . '/php/classes/renderers/class-renderer.php',
+    'SeriouslySimplePodcasting\\Repositories\\Episode_Repository' => $baseDir . '/php/classes/repositories/class-episode-repository.php',
     'SeriouslySimplePodcasting\\Rest\\Episodes_Controller' => $baseDir . '/php/classes/rest/class-episodes-controller.php',
     'SeriouslySimplePodcasting\\Rest\\Rest_Api_Controller' => $baseDir . '/php/classes/rest/class-rest-api-controller.php',
     'SeriouslySimplePodcasting\\ShortCodes\\Player' => $baseDir . '/php/classes/shortcodes/class-player.php',

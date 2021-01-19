@@ -72,10 +72,10 @@ Template Name: News
           </a>
           <div class="news-block__text inner-pad--s">
             <h1 class="type-med margin-btm--m"><a href="<?= the_permalink() ?>"><?= the_title() ?></a></h1>
-            <h2 class="type-small type-lightblue"><?= the_time('j M Y') ?></h2>
+            <h2 class="type-tiny type-lightblue home-event-row_date"><?= the_time('j M Y') ?></h2>
             <p class="type-small"><?= get_the_excerpt() ?></p>
           </div>
-          <a class="type-small inner-pad--s link-arrow-right link-arrow-right--blue" href="<?= the_permalink() ?>">Read More</a>
+          <a class="type-tiny inner-pad--s link-arrow-right link-arrow-right--blue" href="<?= the_permalink() ?>">Read More</a>
         </div>
         <?php endwhile ?>
       </div>

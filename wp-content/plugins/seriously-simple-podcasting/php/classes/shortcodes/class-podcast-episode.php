@@ -30,7 +30,7 @@ class Podcast_Episode {
 			array(
 				'episode' => 0,
 				'content' => 'title,player,details',
-				'style'   => 'mini',
+				'style'   => 'standard',
 			),
 			$params,
 			'podcast_episode'

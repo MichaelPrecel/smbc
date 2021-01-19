@@ -1,5 +1,91 @@
 /*
 ==========================
+  Audio Player
+========================== */
+.wp-playlist {
+  // Reset markdown adjustments
+  div {
+    margin-bottom: 0;
+  }
+}
+
+.article-grid {
+  .wp-playlist {
+    border-color: var(--blue);
+  
+    .wp-playlist-current-item img {
+      display: none;
+    }
+  
+    .wp-playlist-caption {
+      color: var(--blue);
+      // max-width: 100%;
+      white-space: normal;
+      text-overflow: initial;
+    }
+  }
+
+  // Title
+  .wp-playlist-current-item {
+    height: auto;
+    margin-bottom: var(--s);
+  }
+
+  .wp-playlist-item-title {
+    @extend .type-small;
+    margin-bottom: var(--xs);
+  }
+
+  .wp-playlist-item-album {
+    @extend .type-tiny;
+  }
+
+  .wp-playlist-item-artist {
+    @extend .type-tiny;
+    color: var(--lightblue);
+  }
+
+  // Playlist
+  .wp-playlist-item {
+    display: flex;
+    justify-content: space-between;
+    border-color: var(--blue);
+    padding: var(--xxs) 0;
+    @extend .type-tiny;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  .wp-playlist-item-length {
+    position: static;
+    @extend .type-tiny;
+    color: var(--lightblue);
+    margin-left: var(--xs);
+  }
+
+  // Player
+  * {
+    @extend .type;
+  }
+
+  .mejs-container {
+    background: transparent;
+    
+    .mejs-controls {
+      background: var(--lightblue);
+      border-radius: 30px;
+
+      .mejs-time-rail .mejs-time-current {
+        background: var(--blue);
+      }
+    }
+  }
+}
+
+/*
+==========================
   Header
 ========================== */
 .fixed-header-desk {

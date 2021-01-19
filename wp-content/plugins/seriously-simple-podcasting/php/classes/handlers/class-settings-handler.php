@@ -449,6 +449,20 @@ class Settings_Handler {
 					'default'     => '',
 				),
 				array(
+					'id'          => 'itunes_fields_enabled',
+					'label'       => __( 'Enable iTunes fields ', 'seriously-simple-podcasting' ),
+					'description' => __( 'Turn this on to enable the iTunes iOS11 specific fields on each episode.', 'seriously-simple-podcasting' ),
+					'type'        => 'checkbox',
+					'default'     => '',
+				),
+			),
+		);
+
+		$settings['player-settings'] = array(
+			'title'       => __( 'Player', 'seriously-simple-podcasting' ),
+			'description' => __( 'Player Settings', 'seriously-simple-podcasting' ),
+			'fields'      => array(
+				array(
 					'id'          => 'player_locations',
 					'label'       => __( 'Media player locations', 'seriously-simple-podcasting' ),
 					'description' => __( 'Select where to show the podcast media player along with the episode data (download link, duration and file size)', 'seriously-simple-podcasting' ),
@@ -458,7 +472,7 @@ class Settings_Handler {
 						'excerpt'       => __( 'Excerpt', 'seriously-simple-podcasting' ),
 						'excerpt_embed' => __( 'oEmbed Excerpt', 'seriously-simple-podcasting' ),
 					),
-					'default'     => array(),
+					'default'     => 'content',
 				),
 				array(
 					'id'          => 'player_content_location',
@@ -483,13 +497,6 @@ class Settings_Handler {
 					'default'     => 'all',
 				),
 				array(
-					'id'          => 'itunes_fields_enabled',
-					'label'       => __( 'Enable iTunes fields ', 'seriously-simple-podcasting' ),
-					'description' => __( 'Turn this on to enable the iTunes iOS11 specific fields on each episode.', 'seriously-simple-podcasting' ),
-					'type'        => 'checkbox',
-					'default'     => '',
-				),
-				array(
 					'id'          => 'player_meta_data_enabled',
 					'label'       => __( 'Enable Player meta data ', 'seriously-simple-podcasting' ),
 					'description' => __( 'Turn this on to enable player meta data underneath the player. (download link, episode duration and date recorded).', 'seriously-simple-podcasting' ),
@@ -505,34 +512,29 @@ class Settings_Handler {
 						'standard' => __( 'Standard Compact Player', 'seriously-simple-podcasting' ),
 						'larger'   => __( 'HTML5 Player With Album Art', 'seriously-simple-podcasting' ),
 					),
-					'default'     => 'all',
-				),
-				array(
-					'id'          => 'player_background_skin_colour',
-					'label'       => __( 'Background skin colour', 'seriously-simple-podcasting' ),
-					'description' => '<br>' . __( 'Only applicable if using the new HTML5 player', 'seriously-simple-podcasting' ),
-					'type'        => 'colour-picker',
-					'default'     => '#222222',
-					'class'       => 'ssp-color-picker',
-				),
-				array(
-					'id'          => 'player_wave_form_colour',
-					'label'       => __( 'Player progress bar colour', 'seriously-simple-podcasting' ),
-					'description' => '<br>' . __( 'Only applicable if using the new HTML5 player', 'seriously-simple-podcasting' ),
-					'type'        => 'colour-picker',
-					'default'     => '#fff',
-					'class'       => 'ssp-color-picker',
-				),
-				array(
-					'id'          => 'player_wave_form_progress_colour',
-					'label'       => __( 'Player progress bar progress colour', 'seriously-simple-podcasting' ),
-					'description' => '<br>' . __( 'Only applicable if using the new HTML5 player', 'seriously-simple-podcasting' ),
-					'type'        => 'colour-picker',
-					'default'     => '#00d4f7',
-					'class'       => 'ssp-color-picker',
+					'default'     => 'standard',
 				),
 			),
 		);
+
+		$ss_podcasting_player_style = get_option( 'ss_podcasting_player_style', 'standard' );
+		if ( 'standard' !== $ss_podcasting_player_style ) {
+			$html_5_player_settings = array(
+				array(
+					'id'          => 'player_mode',
+					'label'       => __( 'Player mode', 'seriously-simple-podcasting' ),
+					'description' => __( 'Choose between Dark or Light mode, depending on your theme', 'seriously-simple-podcasting' ),
+					'type'        => 'radio',
+					'options'     => array(
+						'dark'  => __( 'Dark Mode', 'seriously-simple-podcasting' ),
+						'light' => __( 'Light Mode', 'seriously-simple-podcasting' ),
+					),
+					'default'     => 'dark',
+				),
+			);
+
+			$settings['player-settings']['fields'] = array_merge( $settings['player-settings']['fields'], $html_5_player_settings );
+		}
 
 		$settings['feed-details'] = array(
 			'title'       => __( 'Feed details', 'seriously-simple-podcasting' ),
@@ -784,6 +786,13 @@ class Settings_Handler {
 				'callback'    => 'esc_url_raw',
 				'class'       => 'regular-text',
 			),
+			array(
+				'id'          => '',
+				'label'       => __( 'Subscribe button links', 'seriously-simple-podcasting' ),
+				'description' => __( 'To create Subscribe Buttons for your site visitors, enter the Distribution URL to your show in the directories below.', 'seriously-simple-podcasting' ),
+				'type'        => '',
+				'placeholder' => __( 'Subscribe button links', 'seriously-simple-podcasting' ),
+			),
 		);
 
 		$subscribe_options_array            = $this->get_subscribe_field_options();
@@ -896,22 +905,6 @@ class Settings_Handler {
 				),
 			),
 		);
-
-		// @todo analytics integration
-		/*$settings['analytics'] = array(
-			'title'       => __( 'Analytics', 'seriously-simple-podcasting' ),
-			'description' => sprintf( __( 'Connect your %s analytics application with your podcast site' ), '<a target="_blank" href=" ' . SSP_CASTOS_APP_URL . '">Seriously Simple Hosting</a>' ),
-			'fields'      => array(
-				array(
-					'id'          => 'ssp_analytics_token',
-					'label'       => __( 'Analytics Token', 'seriously-simple-podcasting' ),
-					'description' => '',
-					'type'        => 'text',
-					'callback'    => 'esc_url_raw',
-					'class'       => 'regular-text',
-				),
-			),
-		);*/
 
 		$settings['castos-hosting'] = array(
 			'title'       => __( 'Hosting', 'seriously-simple-podcasting' ),
@@ -1038,22 +1031,43 @@ class Settings_Handler {
 	 */
 	public function get_subscribe_field_options() {
 		$subscribe_field_options = array();
-		$subscribe_links_options = get_option( 'ss_podcasting_subscribe_options', array() );
-		if ( empty( $subscribe_links_options ) ) {
+
+		$options_handler             = new Options_Handler();
+		$available_subscribe_options = $options_handler->available_subscribe_options;
+
+		$subscribe_options = get_option( 'ss_podcasting_subscribe_options', array() );
+		if ( empty( $subscribe_options ) ) {
 			return $subscribe_field_options;
 		}
 
-		foreach ( $subscribe_links_options as $key => $title ) {
+		if ( isset( $_GET['feed-series'] ) && 'default' !== $_GET['feed-series'] ) {
+			$feed_series_slug = sanitize_text_field( $_GET['feed-series'] );
+			$series           = get_term_by( 'slug', $feed_series_slug, 'series' );
+			$series_id        = $series->ID;
+		}
+
+		foreach ( $subscribe_options as $option_key ) {
+			if ( isset( $available_subscribe_options[ $option_key ] ) ) {
+				if ( isset( $series_id ) ) {
+					$field_id = $option_key . '_url_' . $series_id;
+					$value    = get_option( 'ss_podcasting_' . $field_id );
+				} else {
+					$field_id = $option_key . '_url';
+					$value    = get_option( 'ss_podcasting_' . $field_id );
+				}
+			} else {
+				continue;
+			}
 			$subscribe_field_options[] = array(
-				'id'          => $key,
+				'id'          => $field_id,
 				// translators: %s: Service title eg iTunes
-				'label'       => sprintf( __( '%s URL', 'seriously-simple-podcasting' ), $title ),
+				'label'       => sprintf( __( '%s URL', 'seriously-simple-podcasting' ), $available_subscribe_options[ $option_key ] ),
 				// translators: %s: Service title eg iTunes
-				'description' => sprintf( __( 'Your podcast\'s %s URL.', 'seriously-simple-podcasting' ), $title ),
+				'description' => sprintf( __( 'Your podcast\'s %s URL.', 'seriously-simple-podcasting' ), $available_subscribe_options[ $option_key ] ),
 				'type'        => 'text',
-				'default'     => '',
+				'default'     => $value,
 				// translators: %s: Service title eg iTunes
-				'placeholder' => sprintf( __( '%s URL', 'seriously-simple-podcasting' ), $title ),
+				'placeholder' => sprintf( __( '%s URL', 'seriously-simple-podcasting' ), $available_subscribe_options[ $option_key ] ),
 				'callback'    => 'esc_url_raw',
 				'class'       => 'regular-text',
 			);

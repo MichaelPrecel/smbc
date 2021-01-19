@@ -3,7 +3,7 @@
 Plugin Name: Paid Memberships Pro - Register Helper Add On
 Plugin URI: https://www.paidmembershipspro.com/add-ons/pmpro-register-helper-add-checkout-and-profile-fields/
 Description: Add custom form fields to membership checkout and user profiles with Paid Memberships Pro.
-Version: 1.6.1
+Version: 1.7
 Author: Paid Memberships Pro
 Author URI: https://www.paidmembershipspro.com
 Text Domain: pmpro-register-helper
@@ -11,7 +11,7 @@ Text Domain: pmpro-register-helper
 
 define('PMPRORH_DIR', dirname(__FILE__) );
 define('PMPRORH_URL', WP_PLUGIN_URL . "/pmpro-register-helper");
-define('PMPRORH_VERSION', '1.6.1');
+define('PMPRORH_VERSION', '1.7');
 
 /*
 	Load plugin textdomain.
@@ -212,6 +212,14 @@ function pmprorh_scripts()
 	}
 }
 add_action( 'wp_enqueue_scripts', 'pmprorh_scripts' );
+
+/**
+ * Enqueue admin CSS
+ */
+function pmprorh_admin_enqueue_scripts() {
+	wp_enqueue_style('pmprorh_admin', PMPRORH_URL . '/css/pmprorh_admin.css', array(), PMPRORH_VERSION, "screen");
+}
+add_action( 'admin_enqueue_scripts', 'pmprorh_admin_enqueue_scripts' );
 
 /*
 	Cycle through extra fields. Show them at checkout.
@@ -485,6 +493,11 @@ function pmprorh_pmpro_after_checkout($user_id)
 					//unchecked checkbox
 					$value = 0;
 				}
+				elseif(!empty($_POST[$field->name . "_checkbox"]) && in_array( $field->type, array( 'checkbox', 'checkbox_grouped', 'select2' ) ) )	//handle unchecked checkboxes
+				{
+					//unchecked checkbox
+					$value = array();
+				}
 				elseif(isset($_SESSION[$field->name]))
 				{
 					//file or value?
@@ -515,7 +528,7 @@ function pmprorh_pmpro_after_checkout($user_id)
 				if(isset($value))
 				{
 					if ( isset( $field->sanitize ) && true === $field->sanitize ) {
-						$value = pmprorh_sanitize( $value );
+						$value = pmprorh_sanitize( $value, $field );
                     }
 
 					//callback?
@@ -541,7 +554,7 @@ add_action('pmpro_before_send_to_payfast', 'pmprorh_pmpro_after_checkout', 20);	
  *
  * @return array|int|string|object     Sanitized value
  */
-function pmprorh_sanitize( $value ) {
+function pmprorh_sanitize( $value, $field = null ) {
 
 	if ( is_array( $value ) ) {
 
@@ -557,7 +570,9 @@ function pmprorh_sanitize( $value ) {
 		}
 	}
 
-	if ( ( ! is_array( $value ) ) && ctype_alpha( $value ) ||
+	if ( ! empty( $field ) && ! empty( $field->type ) && $field->type === 'textarea' ) {
+		$value = sanitize_textarea_field( $value );
+	} elseif ( ( ! is_array( $value ) ) && ctype_alpha( $value ) ||
 	     ( ( ! is_array( $value ) ) && strtotime( $value ) ) ||
 	     ( ( ! is_array( $value ) ) && is_string( $value ) ) ||
 	     ( ( ! is_array( $value ) ) && is_numeric( $value) )
@@ -635,8 +650,7 @@ function pmprorh_rf_pmpro_registration_checks($okay)
 				else
 					$value = false;
 
-				if(!empty($field->required) && empty( $_REQUEST[$field->name] ) && empty( $_FILES[$field->name]['name'] ) && empty( $_REQUEST[$field->name.'_old'] ) )
-				{
+				if( ! $field->was_filled_if_needed() ) {
 					$required[] = $field->name;
                     $required_labels[] = $field->label;
 				}
@@ -819,6 +833,10 @@ function pmprorh_rf_show_extra_frontend_profile_fields( $user, $withlocations = 
 				<?php } ?>
 
 				<div class="pmpro_member_profile_edit-fields">
+					<?php if ( ! empty( $box->description ) ) { ?>
+						<div class="pmpro_checkout_description"><?php echo $box->description; ?></div>
+					<?php } ?>
+
 					<?php
 						 // Cycle through groups.
 						foreach( $fields as $field ) {
@@ -962,7 +980,7 @@ function pmprorh_pmpro_add_member_added( $uid = null, $user = null )
             {
 	            if ( isset( $field->sanitize ) && true === $field->sanitize ) {
 
-		            $value = pmprorh_sanitize( $_POST[ $field->name ] );
+		            $value = pmprorh_sanitize( $_POST[ $field->name ], $field );
 	            } elseif( isset($_POST[$field->name]) ) {
 	                $value = $_POST[ $field->name ];
                 } else {
@@ -982,7 +1000,15 @@ function pmprorh_pmpro_add_member_added( $uid = null, $user = null )
                     call_user_func($field->save_function, $user_id, $field->name, 0);
                 else
                     update_user_meta($user_id, $field->meta_key, 0);
-            }
+			}
+			elseif(!empty($_POST[$field->name . "_checkbox"]) && in_array( $field->type, array( 'checkbox', 'checkbox_grouped', 'select2' ) ) )	//handle unchecked checkboxes
+			{
+				//callback?
+				if(!empty($field->save_function))
+					call_user_func($field->save_function, $user_id, $field->name, array());
+				else
+					update_user_meta($user_id, $field->meta_key, array());
+			}
         }
     }
 
@@ -1039,7 +1065,7 @@ function pmprorh_getProfileFields($user_id, $withlocations = false)
 
 				if(!empty($field->profile) && ($field->profile === "admins" || $field->profile === "admin" || $field->profile === "only_admin"))
 				{
-					if(current_user_can("manage_options", $user_id))
+					if( current_user_can( 'manage_options' ) || current_user_can( 'pmpro_membership_manager' ) )
 					{
 						if($withlocations)
 							$profile_fields[$where][] = $field;
@@ -1091,9 +1117,8 @@ function pmprorh_rf_save_extra_profile_fields( $user_id )
 
 			if(isset($_POST[$field->name]) || isset($_FILES[$field->name]))
 			{
-				if ( isset( $field->sanitize ) && true === $field->sanitize ) {
-
-					$value = pmprorh_sanitize( $_POST[ $field->name ] );
+				if ( isset( $_POST[ $field->name ] ) && isset( $field->sanitize ) && true === $field->sanitize ) {
+					$value = pmprorh_sanitize( $_POST[ $field->name ], $field );
 				} elseif( isset($_POST[$field->name]) ) {
 				    $value = $_POST[ $field->name ];
                 } else {
@@ -1113,6 +1138,14 @@ function pmprorh_rf_save_extra_profile_fields( $user_id )
 					call_user_func($field->save_function, $user_id, $field->name, 0);
 				else
 					update_user_meta($user_id, $field->meta_key, 0);
+			}
+			elseif(!empty($_POST[$field->name . "_checkbox"]) && in_array( $field->type, array( 'checkbox', 'checkbox_grouped', 'select2' ) ) )	//handle unchecked checkboxes
+			{
+				//callback?
+				if(!empty($field->save_function))
+					call_user_func($field->save_function, $user_id, $field->name, array());
+				else
+					update_user_meta($user_id, $field->meta_key, array());
 			}
 		}
 	}
@@ -1174,7 +1207,10 @@ function pmprorh_pmpro_registration_checks($okay)
 			else
 				$needle = strtolower($_REQUEST['bemail']);
 			$haystack = explode("\n", $restrict_emails);
-			array_walk($haystack, create_function('&$val', '$val = trim($val);'));
+			array_walk( $haystack, function( &$val ) { 
+				$val = trim($val);
+				return $val;
+			});
 			if(!in_array($needle, $haystack))
 			{
 				global $pmpro_msg, $pmpro_msgt;
@@ -1198,8 +1234,10 @@ function pmprorh_pmpro_registration_checks($okay)
 			else
 				$needle = strtolower($_REQUEST['username']);
 			$haystack = explode("\n", $restrict_usernames);
-
-			array_walk($haystack, create_function('&$val', '$val = trim($val);'));
+			array_walk( $haystack, function( &$val ) { 
+				$val = trim($val);
+				return $val;
+			});
 			if(!in_array($needle, $haystack))
 			{
 				global $pmpro_msg, $pmpro_msgt;

@@ -70,7 +70,7 @@ class Admin_Controller extends Controller {
 		$this->logger = new Log_Helper();
 
 		if ( is_admin() ) {
-			$this->admin_notices_handler = new Admin_Notifications_Handler($this->token);
+			$this->admin_notices_handler = new Admin_Notifications_Handler( $this->token );
 		}
 
 		// Handle localisation.
@@ -92,6 +92,9 @@ class Admin_Controller extends Controller {
 
 		// Dismiss the categories update screen
 		add_action( 'init', array( $this, 'dismiss_categories_update' ) );
+
+		// Dismiss the categories update screen
+		add_action( 'init', array( $this, 'disable_elementor_template_notice' ) );
 
 		// Hide WP SEO footer text for podcast RSS feed.
 		add_filter( 'wpseo_include_rss_footer', array( $this, 'hide_wp_seo_rss_footer' ) );
@@ -749,7 +752,7 @@ HTML;
 									<label class="ssp-episode-details-label" for="' . esc_attr( $k ) . '">' . wp_kses_post( $v['name'] ) . '</label>';
 
 						if ( ssp_is_connected_to_castos() ) {
-							$html .= '<div id="ssp_upload_notification">Your browser doesn\'t have HTML5 support.</div>';
+							$html .= '<div id="ssp_upload_notification">' . __( 'An error has occurred with the file upload functionality. Please check your site for any plugin or theme conflicts.', 'seriously-simple-podcasting' ) . '</div>';
 						}
 
 						$html .= '<input name="' . esc_attr( $k ) . '" type="text" id="upload_' . esc_attr( $k ) . '" value="' . esc_attr( $data ) . '" />
@@ -1247,7 +1250,7 @@ HTML;
 		if ( 'post-new.php' === $hook || 'post.php' === $hook ) {
 			global $post;
 			if ( in_array( $post->post_type, ssp_post_types( true ) ) ) {
-				wp_register_style( 'jquery-peekabar', esc_url( $this->assets_url . 'css/jquery.peekabar.css' ), array(), $this->version );
+				wp_register_style( 'jquery-peekabar', esc_url( $this->assets_url . 'css/jquery-peekabar.css' ), array(), $this->version );
 				wp_enqueue_style( 'jquery-peekabar' );
 			}
 		}
@@ -1262,7 +1265,7 @@ HTML;
 			wp_register_style( 'jquery-ui-smoothness', esc_url( $this->assets_url . 'css/jquery-ui-smoothness.css' ), array(), $this->version );
 			wp_enqueue_style( 'jquery-ui-smoothness' );
 
-			wp_register_style( 'import-rss', esc_url( $this->assets_url . 'css/import.rss.css' ), array(), $this->version );
+			wp_register_style( 'import-rss', esc_url( $this->assets_url . 'css/import-rss.css' ), array(), $this->version );
 			wp_enqueue_style( 'import-rss' );
 
 		}
@@ -1574,6 +1577,9 @@ HTML;
 			if ( $podmotor_episode_id ) {
 				update_post_meta( $id, 'podmotor_episode_id', $podmotor_episode_id );
 			}
+			add_action( 'admin_notices', array( $this->admin_notices_handler, 'castos_api_episode_success' ) );
+		} else {
+			add_action( 'admin_notices', array( $this->admin_notices_handler, 'castos_api_error' ) );
 		}
 
 	}
@@ -1780,6 +1786,18 @@ HTML;
 			return;
 		}
 		update_option( 'ssp_categories_update_dismissed', 'true' );
+	}
+
+	/**
+	 * Dismiss Elementor templates message when user clicks 'Dismiss' link
+	 */
+	public function disable_elementor_template_notice() {
+		// Check if the ssp_disable_elementor_template_notice variable exists
+		$ssp_disable_elementor_template_notice = ( isset( $_GET['ssp_disable_elementor_template_notice'] ) ? sanitize_text_field( $_GET['ssp_disable_elementor_template_notice'] ) : '' );
+		if ( empty( $ssp_disable_elementor_template_notice ) ) {
+			return;
+		}
+		update_option( 'ss_podcasting_elementor_templates_disabled', 'true' );
 	}
 
 }
